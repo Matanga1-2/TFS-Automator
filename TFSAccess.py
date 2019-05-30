@@ -28,9 +28,9 @@ TFS_INSTANCE = TFS.TFSConnection(URI, PROJECT, USER_NAME, PASSWORD)
 #
 # wiql = TFS_INSTANCE.connection.run_wiql(query, params={'$top': 10, 'timePrecision': True, 'api-version': '1.0'})
 
-# query = TFS_INSTANCE.connection.run_query('4fb0a26f-154c-41b9-beca-73abec43b3db')
-# result = query.result
-# print(query.columns)
-# print(query.column_names)
-# formatted_workitems_id = [workitem['ID'] for workitem in query.workitems]
-# print(formatted_workitems_id)
+query = TFS_INSTANCE.connection.run_query('4fb0a26f-154c-41b9-beca-73abec43b3db')
+result = query.result
+print(query.columns)
+print(query.column_names)
+formatted_workitems_id = [workitem['ID'] for workitem in query.workitems]
+print(formatted_workitems_id)
