@@ -4,7 +4,6 @@ It uses Dohq package(https://devopshq.github.io/tfs/examples.html)
 '''
 
 from TFSConnect import TFS
-import requests
 from os import path
 import sys
 
@@ -118,7 +117,11 @@ def add_task(TFS_INSTANCE ,task_fields, pbi_id):
                  ]
 
     task = TFS_INSTANCE.connection.create_workitem('Task', fields=task_fields, relations_raw=relations)
-    print(task.id)
+    print("Task " + task.id + " Added successfully")
+
+
+def end_program():
+    input("Press any key to continue...")
 
 
 def main():
@@ -142,7 +145,7 @@ def main():
             pbi_data = TFS_INSTANCE.connection.get_workitem(pbi_id)
         except requests.exceptions.HTTPError as error:
             print('An HTTP error: {0}'.format(error))
-            exit()
+            end_program()
         else:
             break
 
@@ -153,7 +156,11 @@ def main():
     for task in tasks:
         task['System.AreaId'] = pbi_data['System.AreaId']           # Area Path
         task['System.IterationId'] = pbi_data['System.IterationId']  # Iteration Path
-        add_task(TFS_INSTANCE, task, pbi_id)
+        try:
+            add_task(TFS_INSTANCE, task, pbi_id)
+        except requests.exceptions.HTTPERror as error:
+            print('An HTTP error: {0}'.format(error))
+            end_program()
 
 
 if __name__== "__main__":
