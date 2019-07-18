@@ -7,7 +7,6 @@ from TFSConnect import TFS
 import requests.exceptions
 from os import path
 from os import remove
-import sys
 
 
 def end_program():
@@ -43,17 +42,17 @@ def get_credentials():
             print("There was a problem reading your credentials. Please try again...")
             end_program()
     else:
-        f = open("config.txt", "w+")
         print("It looks like this is your first time...")
         credentials['userName'] = input("What is your TFS username? ")
         credentials['password'] = input("What is your TFS password: ")
         first_name = input("What is your first name? ")
         last_name = input("What is your last name? ")
-        credentials['name'] = first_name + " " + last_name + r"<NET-BET\\" + first_name + last_name[0] + ">"
+        credentials['name'] = first_name + " " + last_name + "<NET-BET\\" + first_name + last_name[0] + ">"
         credentials['uri'] = "https://tfs2018.net-bet.net/tfs/DefaultCollection/"
         credentials['project'] = "theLotter"
 
         # Save credentials in config file
+        f = open("config.txt", "w+")
         f.write(credentials['userName'] + "\n")
         f.write(credentials['password'] + "\n")
         f.write(credentials['uri'] + "\n")
