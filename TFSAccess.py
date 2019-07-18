@@ -1,10 +1,12 @@
-'''
+"""
 The program handles managing work items in TFS.
 It uses Dohq package(https://devopshq.github.io/tfs/examples.html)
-'''
+"""
 
 from TFSConnect import TFS
+import requests.exceptions
 from os import path
+from os import remove
 import sys
 
 
@@ -19,22 +21,28 @@ def get_credentials():
     credentials = {}
     if path.isfile('./config.txt'):
         f = open("config.txt", "r")
-        if f.mode == 'r':
-            credentials_input = f.readlines()
-            credentials['userName'] = credentials_input[0].rstrip()
-            credentials['password'] = credentials_input[1].rstrip()
-            credentials['uri'] = credentials_input[2].rstrip()
-            credentials['project'] = credentials_input[3].rstrip()
-            credentials['name'] = credentials_input[4].rstrip().replace(r'\\',r'\'').replace(r"'","")
+        try:
+            if f.mode == 'r':
+                credentials_input = f.readlines()
+                credentials['userName'] = credentials_input[0].rstrip()
+                credentials['password'] = credentials_input[1].rstrip()
+                credentials['uri'] = credentials_input[2].rstrip()
+                credentials['project'] = credentials_input[3].rstrip()
+                credentials['name'] = credentials_input[4].rstrip().replace(r'\\',r'\'').replace(r"'","")
+                f.close()
+            else:
+                print("There was an error getting the credentials. Please try again")
+                sys.exit()
+        except IndexError:
             f.close()
-        else:
-            print("There was an error getting the credentials. Please try again")
-            sys.exit()
+            remove("config.txt")
+            print("There was a problem reading your credentials. Please try again...")
+            exit()
     else:
         f = open("config.txt", "w+")
         print("It looks like this is your first time...")
         credentials['userName'] = input("What is your TFS username? ")
-        credentials['password'] = input("What is your TFS password? ")
+        credentials['password'] = input("What is your TFS password: ")
         first_name = input("What is your first name? ")
         last_name = input("What is your last name? ")
         credentials['name'] = first_name + " " + last_name + r"<NET-BET\\" + first_name + last_name[0] + ">"
@@ -58,15 +66,20 @@ def get_pbi_id():
 
     while True:
         try:
-            PBIId = int(input("Enter PBI ID:"))
+            pbi_id = int(input("Enter PBI ID:"))
         except:
             print("Invalid ID. Try again")
         else:
-            return PBIId
+            return pbi_id
 
 
 def get_tasks(credentials):
-    tasks = []
+    """
+    Function to get the tasks we want to add to the PBI
+    :param credentials: a TFS credentials object
+    :return: a list of dictionaries with the tasks fields
+    """
+    tasks = list([])
     # HLD
     tasks.append({
          'System.Title': 'High Level Design',               # Title
@@ -110,6 +123,13 @@ def get_tasks(credentials):
 
 
 def add_task(TFS_INSTANCE ,task_fields, pbi_id):
+    """
+    Function to add a TFS task linked as child to a given PBI
+    :param TFS_INSTANCE: the TFS connection
+    :param task_fields: dictionary with the task fields
+    :param pbi_id: the linked PBI ID
+    :return: the new task ID
+    """
     relation_url = 'https://tfs2018.net-bet.net/tfs/DefaultCollection/154f45b9-7e72-44b9-bd28-225c488dfde2/_apis/wit/workItems/'
     relations = [{'rel': 'System.LinkTypes.Hierarchy-Reverse',  # parent
                   'url': relation_url + str(pbi_id)
@@ -117,11 +137,7 @@ def add_task(TFS_INSTANCE ,task_fields, pbi_id):
                  ]
 
     task = TFS_INSTANCE.connection.create_workitem('Task', fields=task_fields, relations_raw=relations)
-    print("Task " + task.id + " Added successfully")
-
-
-def end_program():
-    input("Press any key to continue...")
+    return task.id
 
 
 def main():
@@ -145,7 +161,7 @@ def main():
             pbi_data = TFS_INSTANCE.connection.get_workitem(pbi_id)
         except requests.exceptions.HTTPError as error:
             print('An HTTP error: {0}'.format(error))
-            end_program()
+            exit()
         else:
             break
 
@@ -154,14 +170,11 @@ def main():
 
     # Add tasks
     for task in tasks:
-        task['System.AreaId'] = pbi_data['System.AreaId']           # Area Path
+        task['System.AreaId'] = pbi_data['System.AreaId']            # Area Path
         task['System.IterationId'] = pbi_data['System.IterationId']  # Iteration Path
-        try:
-            add_task(TFS_INSTANCE, task, pbi_id)
-        except requests.exceptions.HTTPERror as error:
-            print('An HTTP error: {0}'.format(error))
-            end_program()
+        new_task = add_task(TFS_INSTANCE, task, pbi_id)              # Add a new task
+        print(new_task)
 
 
-if __name__== "__main__":
+if __name__ == "__main__":
     main()
