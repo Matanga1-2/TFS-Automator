@@ -10,6 +10,10 @@ from os import remove
 import sys
 
 
+def end_program():
+    input("Press any key to continue...")
+
+
 def get_credentials():
     """
     The function checks if credentials exists in the config file.
@@ -32,12 +36,12 @@ def get_credentials():
                 f.close()
             else:
                 print("There was an error getting the credentials. Please try again")
-                sys.exit()
+                end_program()
         except IndexError:
             f.close()
             remove("config.txt")
             print("There was a problem reading your credentials. Please try again...")
-            exit()
+            end_program()
     else:
         f = open("config.txt", "w+")
         print("It looks like this is your first time...")
@@ -161,7 +165,7 @@ def main():
             pbi_data = TFS_INSTANCE.connection.get_workitem(pbi_id)
         except requests.exceptions.HTTPError as error:
             print('An HTTP error: {0}'.format(error))
-            exit()
+            end_program()
         else:
             break
 
@@ -172,8 +176,13 @@ def main():
     for task in tasks:
         task['System.AreaId'] = pbi_data['System.AreaId']            # Area Path
         task['System.IterationId'] = pbi_data['System.IterationId']  # Iteration Path
-        new_task = add_task(TFS_INSTANCE, task, pbi_id)              # Add a new task
-        print(new_task)
+        try:
+            new_task = add_task(TFS_INSTANCE, task, pbi_id)              # Add a new task
+        except requests.exceptions.HTTPError as error:
+            print("Oops.. there was an HTTP error: {0}".format(error))
+            end_program()
+        print("Task " + str(new_task) + " was added successfully")
+    end_program()
 
 
 if __name__ == "__main__":
