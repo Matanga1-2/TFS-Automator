@@ -117,10 +117,11 @@ def get_tasks(credentials):
     })
     # Review tests
     tasks.append({
-        'System.Title': 'Review Tests',                    # Title
+        'System.Title': 'Review Tests',                     # Title
         'Microsoft.VSTS.Common.BacklogPriority': '170',     # Backlog Priority
-        'Microsoft.VSTS.Common.Activity': 'Requirements',    # Activity
-        'System.AssignedTo': credentials['name'],      # Remaining Work
+        'Microsoft.VSTS.Common.Activity': 'Requirements',   # Activity
+        'Microsoft.VSTS.Scheduling.RemainingWork': '0.5',   # Remaining Work
+        'System.AssignedTo': credentials['name'],           # Assigned to the System Analyst
     })
     return tasks
 
