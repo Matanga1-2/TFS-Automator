@@ -9,8 +9,16 @@ from os import path
 from os import remove
 
 
+class CredentialsError(Exception):
+    pass
+
+
 def end_program():
-    input("Press any key to continue...")
+    user_response = input("Enter any character and press enter to handle another PBI: ")
+    if user_response != "":
+        return True
+    else:
+        return False
 
 
 def get_credentials():
@@ -35,16 +43,16 @@ def get_credentials():
                 f.close()
             else:
                 print("There was an error getting the credentials. Please try again")
-                end_program()
+                raise CredentialsError
         except IndexError:
             f.close()
             remove("config.txt")
             print("There was a problem reading your credentials. Please try again...")
-            end_program()
+            raise CredentialsError
     else:
         print("It looks like this is your first time...")
         credentials['userName'] = input("What is your TFS username? ")
-        credentials['password'] = input("What is your TFS password: ")
+        credentials['password'] = input("What is your TFS password? ")
         first_name = input("What is your first name? ")
         last_name = input("What is your last name? ")
         credentials['name'] = first_name + " " + last_name + "<NET-BET\\" + first_name + last_name[0] + ">"
@@ -148,41 +156,75 @@ def main():
     """
     The main program function
     """
+    # Initialize variables
+    retry = True
+    credentials = ""
+    TFS_INSTANCE = ""
+    tasks = ""
 
-    # Get credentials for the connection
-    credentials = get_credentials()
+    while retry:
 
-    # Initialize a new TFS connection
-    TFS_INSTANCE = TFS.TFSConnection(credentials['uri'], credentials['project'],
-                                     credentials['userName'], credentials['password'])
+        print()
+        print("Hello! Welcome the the TFS Assistant...")
+        print()
+        if credentials == "":
+            # Get credentials for the connection
+            try:
+                credentials = get_credentials()
+            except CredentialsError:
+                continue
 
-    # Ask for PBI Get the PBI information
-    pbi_id = get_pbi_id()
+        if TFS_INSTANCE == "":
+            # Initialize a new TFS connection
+            TFS_INSTANCE = TFS.TFSConnection(credentials['uri'], credentials['project'],
+                                             credentials['userName'], credentials['password'])
 
-    # Get the PBI data
-    while True:
+        # Ask for PBI Get the PBI information
+        pbi_id = get_pbi_id()
+
+        # Get the PBI data
         try:
             pbi_data = TFS_INSTANCE.connection.get_workitem(pbi_id)
         except requests.exceptions.HTTPError as error:
             print('An HTTP error: {0}'.format(error))
-            end_program()
+            if end_program():
+                continue
+            else:
+                retry = False
+                continue
+        except:
+            if end_program():
+                continue
+            else:
+                retry = False
+                continue
+
+        # Get tasks to add
+        if tasks == "":
+            tasks = get_tasks(credentials)
+
+        # Add tasks
+        for task in tasks:
+            task['System.AreaId'] = pbi_data['System.AreaId']            # Area Path
+            task['System.IterationId'] = pbi_data['System.IterationId']  # Iteration Path
+            try:
+                new_task = add_task(TFS_INSTANCE, task, pbi_id)              # Add a new task
+            except requests.exceptions.HTTPError as error:
+                print("Oops.. there was an HTTP error: {0}".format(error))
+                if end_program():
+                    continue
+                else:
+                    retry = False
+            print("Task " + str(new_task) + " was added successfully")
+
+        # check if need to continue
+        if end_program():
+            continue
         else:
-            break
+            retry = False
+            continue
 
-    # Get tasks to add
-    tasks = get_tasks(credentials)
-
-    # Add tasks
-    for task in tasks:
-        task['System.AreaId'] = pbi_data['System.AreaId']            # Area Path
-        task['System.IterationId'] = pbi_data['System.IterationId']  # Iteration Path
-        try:
-            new_task = add_task(TFS_INSTANCE, task, pbi_id)              # Add a new task
-        except requests.exceptions.HTTPError as error:
-            print("Oops.. there was an HTTP error: {0}".format(error))
-            end_program()
-        print("Task " + str(new_task) + " was added successfully")
-    end_program()
+    exit()
 
 
 if __name__ == "__main__":
