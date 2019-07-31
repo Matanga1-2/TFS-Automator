@@ -21,6 +21,35 @@ def add_task(tfs_instance, task_fields, pbi_id):
     return task.id
 
 
+def copy_task(tfs_instance, original_task, target_pbi_data):
+    """
+    Function to copy a TFS task from one PBI to another PBI as a child
+    :param tfs_instance: the TFS connection
+    :param original_task: a TFS work item object of the task to copy
+    :param target_pbi_data: the target PBI data
+    :return: the new task ID
+    """
+    relation_url = r"""https://tfs2018.net-bet.net/tfs/DefaultCollection/154f45b9-7e72-44b9-bd28-225c488dfde2/
+        _apis/wit/workItems/"""
+    relations = [{'rel': 'System.LinkTypes.Hierarchy-Reverse',  # parent
+                  'url': relation_url + str(target_pbi_data.id)
+                  }
+                 ]
+
+    try:
+        new_task = tfs_instance.connection.copy_workitem(original_task, with_links_and_attachments=False,
+                                                         target_area=target_pbi_data['System.AreaId'],
+                                                         target_iteration=target_pbi_data['System.IterationId'])
+        new_task_id = new_task.id
+        new_task.add_relations_raw(relations_raw=relations)
+    except requests.exceptions.HTTPError as error:
+        print("Oops.. there was an HTTP error: {0}".format(error))
+        return
+    except:
+        pass
+    print("Task " + str(new_task_id) + " was copied to PBI " + str(target_pbi_data.id) + " successfully")
+
+
 def add_task_to_pbi(tfs_instance, task, pbi_data):
     """
     Add a new task to a specific PBI (with correct area and iteration)
@@ -46,7 +75,7 @@ def add_regular_tasks_to_pbi(tfs_instance, user_credentials):
     :param user_credentials: the user credentials dictionary
     :return: nothing
     """
-    # Ask for PBI Get the PBI information
+    # Ask for PBI ID
     pbi_id = getObjects.get_pbi_id()
 
     # Get the PBI data
@@ -73,7 +102,7 @@ def add_cleanup_tasks_to_pbi(tfs_instance, user_credentials):
     :param user_credentials: the user credentials dictionary
     :return: nothing
     """
-    # Ask for PBI Get the PBI information
+    # Ask for PBI ID
     pbi_id = getObjects.get_pbi_id()
 
     # Get the PBI data
@@ -91,3 +120,43 @@ def add_cleanup_tasks_to_pbi(tfs_instance, user_credentials):
     # Add tasks
     for task in tasks:
         add_task_to_pbi(tfs_instance, task, pbi_data)
+
+
+def clone_pbi_tasks(tfs_instance, user_credentials):
+    """
+    Copies a specific PBI tasks to another PBI
+    :param tfs_instance: the TFS connection
+    :param user_credentials: the user credentials dictionary
+    :return: nothing
+    """
+
+    # Ask for the first PBI ID
+    print("You need to specify the source PBI ID")
+    source_pbi_id = getObjects.get_pbi_id()
+
+    # Get the first PBI data
+    try:
+        source_pbi_data = tfs_instance.connection.get_workitem(source_pbi_id)
+    except requests.exceptions.HTTPError as error:
+        print('An HTTP error: {0}'.format(error))
+        return
+    except:
+        return
+
+    # Ask for the second PBI ID
+    print("You need to specify the target PBI ID")
+    target_pbi_id = getObjects.get_pbi_id()
+
+    # Get the second PBI data
+    try:
+        target_pbi_data = tfs_instance.connection.get_workitem(target_pbi_id)
+    except requests.exceptions.HTTPError as error:
+        print('An HTTP error: {0}'.format(error))
+        return
+    except:
+        return
+
+    # Copy tasks
+    for task_id in source_pbi_data.child_ids:
+        task = tfs_instance.connection.get_workitem(task_id)
+        copy_task(tfs_instance, task, target_pbi_data)
