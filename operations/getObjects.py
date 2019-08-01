@@ -86,6 +86,8 @@ def get_tasks(user_credentials, type="regular"):
                                    "Release to all environments</br>* QA2 (full QA)</br>* Staging2</br>* Production " +
                                    "(feature sanity if possible)</br>* PerfCD</br>* ProdLikeCD"
             })
+
+    if type == "cleanup" or type == "going_live":
         # Exploratory Tests
         tasks.append({
             'System.Title': 'Exploratory Tests',  # Title
@@ -93,4 +95,28 @@ def get_tasks(user_credentials, type="regular"):
             'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
             'Microsoft.VSTS.Scheduling.RemainingWork': '',  # Remaining Work
         })
+
+    if type == "going_live":
+        # Activate toggle
+        tasks.append({
+            'System.Title': 'Activate feature toggle',  # Title
+            'Microsoft.VSTS.Common.BacklogPriority': '50',  # Backlog Priority
+            'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
+            'Microsoft.VSTS.Scheduling.RemainingWork': '',  # Remaining Work
+        })
+        # Rollback plan
+        tasks.append({
+            'System.Title': 'Rollback Plan',  # Title
+            'Microsoft.VSTS.Common.BacklogPriority': '20',  # Backlog Priority
+            'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
+            'Microsoft.VSTS.Scheduling.RemainingWork': '0',  # Remaining Work
+        })
+        # Notify
+        tasks.append({
+            'System.Title': 'Notify ...',  # Title
+            'Microsoft.VSTS.Common.BacklogPriority': '50',  # Backlog Priority
+            'Microsoft.VSTS.Common.Activity': 'Requirements',  # Activity
+            'Microsoft.VSTS.Scheduling.RemainingWork': '0',  # Remaining Work
+        })
+
     return tasks

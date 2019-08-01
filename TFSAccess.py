@@ -26,8 +26,8 @@ def get_operation():
     print("Available operations:")
     print("(1) Add regular tasks to a PBI")
     print("(2) Add cleanup tasks to a PBI")
-    print("(3) Clone tasks between PBIs")
-
+    print("(3) Add going live tasks to a PBI")
+    print("(4) Clone tasks between PBIs")
 
     while retry:
         operation = input("Please select the required operation:")
@@ -36,6 +36,8 @@ def get_operation():
         elif operation == "2":
             return "add_cleanup"
         elif operation == "3":
+            return "add_going_live"
+        elif operation == "4":
             return "clone_tasks"
         else:
             print("Please try again...")
@@ -69,9 +71,11 @@ def main():
 
         operation = get_operation()
         if operation == "add_regular":
-            manageTasks.add_regular_tasks_to_pbi(tfs_instance, user_credentials)
+            manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials, type="regular")
         elif operation == "add_cleanup":
-            manageTasks.add_cleanup_tasks_to_pbi(tfs_instance, user_credentials)
+            manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials, type="cleanup")
+        elif operation == "add_going_live":
+            manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials, type="going_live")
         elif operation == "clone_tasks":
             manageTasks.clone_pbi_tasks(tfs_instance, user_credentials)
 
