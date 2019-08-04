@@ -21,33 +21,40 @@ def add_task(tfs_instance, task_fields, pbi_id):
     return task.id
 
 
-def copy_task(tfs_instance, original_task, target_pbi_data):
+def copy_task(tfs_instance, original_task_data, target_pbi_data):
     """
     Function to copy a TFS task from one PBI to another PBI as a child
     :param tfs_instance: the TFS connection
-    :param original_task: a TFS work item object of the task to copy
+    :param original_task_data: a TFS work item object of the task to copy
     :param target_pbi_data: the target PBI data
     :return: the new task ID
     """
-    relation_url = r"""https://tfs2018.net-bet.net/tfs/DefaultCollection/154f45b9-7e72-44b9-bd28-225c488dfde2/
-        _apis/wit/workItems/"""
-    relations = [{'rel': 'System.LinkTypes.Hierarchy-Reverse',  # parent
-                  'url': relation_url + str(target_pbi_data.id)
-                  }
-                 ]
 
-    try:
-        new_task = tfs_instance.connection.copy_workitem(original_task, with_links_and_attachments=False,
-                                                         target_area=target_pbi_data['System.AreaId'],
-                                                         target_iteration=target_pbi_data['System.IterationId'])
-        new_task_id = new_task.id
-        new_task.add_relations_raw(relations_raw=relations)
-    except requests.exceptions.HTTPError as error:
-        print("Oops.. there was an HTTP error: {0}".format(error))
-        return
-    except:
-        pass
-    print("Task " + str(new_task_id) + " was copied to PBI " + str(target_pbi_data.id) + " successfully")
+    # Build the task fields
+    original_task = original_task_data.fields
+
+    # Only if type is "Task"
+    if original_task["System.WorkItemType"] == "Task":
+        target_task = ({})
+        try:
+            target_task["System.State"] = "To Do"
+            target_task["System.AreaId"] = target_pbi_data['System.AreaId']
+            target_task["System.IterationId"] = target_pbi_data["System.IterationId"]
+            target_task["System.Title"] = original_task["System.Title"]
+            target_task["Microsoft.VSTS.Common.BacklogPriority"] = original_task["Microsoft.VSTS.Common.BacklogPriority"]
+            target_task["Microsoft.VSTS.Common.Activity"] = original_task["Microsoft.VSTS.Common.Activity"]
+            target_task["System.Description"] = original_task["System.Description"]
+        except:
+            pass
+
+        # Add a new task to the target PBI with the source task fields
+        try:
+            new_task = add_task(tfs_instance, target_task, target_pbi_data.id)
+        except requests.exceptions.HTTPError as error:
+            print("Oops.. there was an HTTP error: {0}".format(error))
+            return
+
+        print("Task " + str(new_task) + " was copied to PBI " + str(target_pbi_data.id) + " successfully")
 
 
 def add_task_to_pbi(tfs_instance, task, pbi_data):
