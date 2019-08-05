@@ -1,8 +1,12 @@
 from os import path
 from os import remove
+from os import environ
+from os import mkdir
+
 
 class CredentialsError(Exception):
     pass
+
 
 def get_credentials():
     """
@@ -13,8 +17,16 @@ def get_credentials():
 
     # Check the connection credentials, if they do not exist get and save them
     credentials = {}
-    if path.isfile('./config.txt'):
-        f = open("config.txt", "r")
+
+    desktop = path.join(path.join(environ['USERPROFILE']), 'Desktop')
+    credentials_folder = desktop + "\\TFS"
+    credentials_file = credentials_folder + "\\config.txt"
+
+    if not path.isdir(credentials_folder):
+        mkdir(credentials_folder)
+
+    if path.exists(credentials_file):
+        f = open(credentials_file, "r")
         try:
             if f.mode == 'r':
                 credentials_input = f.readlines()
@@ -29,7 +41,7 @@ def get_credentials():
                 raise CredentialsError
         except IndexError:
             f.close()
-            remove("config.txt")
+            remove(credentials_file)
             print("There was a problem reading your credentials. Please try again...")
             raise CredentialsError
     else:
@@ -43,10 +55,11 @@ def get_credentials():
         credentials['project'] = "theLotter"
 
         # Save credentials in config file
-        f = open("config.txt", "w+")
+        f = open(credentials_file, "w+")
         f.write(credentials['userName'] + "\n")
         f.write(credentials['password'] + "\n")
         f.write(credentials['uri'] + "\n")
         f.write(credentials['project'] + "\n")
         f.write(credentials['name'] + "\n")
+        f.close()
     return credentials
