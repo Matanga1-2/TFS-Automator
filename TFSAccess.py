@@ -66,12 +66,10 @@ def main():
 
         operations = manageOperations.Operations()
         selected_operation = get_operation(operations)
-        if selected_operation.name == "RegularTasks":
-            manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials, type="regular")
-        elif selected_operation.name == "CleanupTasks":
-            manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials, type="cleanup")
-        elif selected_operation.name == "GoingLiveTasks":
-            manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials, type="going_live")
+        if selected_operation.name == "RegularTasks" \
+                or selected_operation.name == "CleanupTasks"\
+                or selected_operation.name == "GoingLiveTasks":
+            manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials, type=selected_operation.name)
         elif selected_operation.name == "CloneTasks":
             manageTasks.clone_pbi_tasks(tfs_instance, user_credentials)
 
