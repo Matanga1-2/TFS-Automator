@@ -6,6 +6,7 @@ It uses Dohq package(https://devopshq.github.io/tfs/examples.html)
 from TFSConnect import TFS
 from credentials import handleCredentials
 from operations import manageTasks
+from operations import manageOperations
 
 
 def end_program():
@@ -16,31 +17,25 @@ def end_program():
         return False
 
 
-def get_operation():
+def get_operation(operations):
     """
     The function will get the required operation from the user.
     :return: A string representing the operation
     """
 
     retry = True
-    print("Available operations:")
-    print("(1) Add regular tasks to a PBI")
-    print("(2) Add cleanup tasks to a PBI")
-    print("(3) Add going live tasks to a PBI")
-    print("(4) Clone tasks between PBIs")
+    # operations_list = operations.get_available_operations_ordered()
+    # print("Available operations:")
+    for operation in operations.get_operations_list_ordered():
+        print(operation)
 
     while retry:
-        operation = input("Please select the required operation:")
-        if operation == "1":
-            return "add_regular"
-        elif operation == "2":
-            return "add_cleanup"
-        elif operation == "3":
-            return "add_going_live"
-        elif operation == "4":
-            return "clone_tasks"
-        else:
+        selected_operation_ordinal_number = input("Please select the required operation:")
+        selected_operation = operations.get_operation_by_ordinal_number(selected_operation_ordinal_number)
+        if selected_operation is None:
             print("Please try again...")
+        else:
+            return selected_operation
 
 
 def main():
@@ -69,14 +64,15 @@ def main():
             tfs_instance = TFS.TFSConnection(user_credentials['uri'], user_credentials['project'],
                                              user_credentials['userName'], user_credentials['password'])
 
-        operation = get_operation()
-        if operation == "add_regular":
+        operations = manageOperations.Operations()
+        selected_operation = get_operation(operations)
+        if selected_operation.name == "RegularTasks":
             manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials, type="regular")
-        elif operation == "add_cleanup":
+        elif selected_operation.name == "CleanupTasks":
             manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials, type="cleanup")
-        elif operation == "add_going_live":
+        elif selected_operation.name == "GoingLiveTasks":
             manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials, type="going_live")
-        elif operation == "clone_tasks":
+        elif selected_operation.name == "CloneTasks":
             manageTasks.clone_pbi_tasks(tfs_instance, user_credentials)
 
         # check if need to continue
