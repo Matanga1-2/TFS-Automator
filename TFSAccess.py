@@ -8,6 +8,8 @@ from credentials import handleCredentials
 from operations import manageTasks
 from operations import manageOperations
 from watchdog import watchdog
+import os
+import signal
 
 
 def end_program():
@@ -86,7 +88,7 @@ def main():
             retry = False
             wd.refresh()
             continue
-    exit()
+    os.kill(os.getpid(), signal.SIGTERM)
 
 
 if __name__ == "__main__":

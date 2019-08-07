@@ -1,10 +1,6 @@
-import os
 import signal
 import threading
-from os import path
-from os import remove
-from os import environ
-from os import mkdir
+import os
 
 
 class Watchdog():
@@ -37,7 +33,7 @@ class Watchdog():
     def get_timeout(self, default=120):
         file_path = "./watchdog_config.txt"
         while True:
-            if path.exists(file_path):
+            if os.path.exists(file_path):
                 f = open(file_path, "r")
                 try:
                     timeout = f.readlines()[0]
@@ -46,7 +42,7 @@ class Watchdog():
                     return timeout
                 except IndexError:
                     f.close()
-                    remove(file_path)
+                    os.remove(file_path)
                     continue
             else:
                 f = open(file_path, "w+")
