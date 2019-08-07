@@ -68,7 +68,8 @@ def main():
         selected_operation = get_operation(operations)
         if selected_operation.name == "RegularTasks" \
                 or selected_operation.name == "CleanupTasks"\
-                or selected_operation.name == "GoingLiveTasks":
+                or selected_operation.name == "GoingLiveTasks"\
+                or selected_operation.name == "E2ETasks":
             manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials, type=selected_operation.name)
         elif selected_operation.name == "CloneTasks":
             manageTasks.clone_pbi_tasks(tfs_instance, user_credentials)

@@ -17,6 +17,99 @@ def get_pbi_id():
         else:
             return pbi_id
 
+def __get_available_tasks(user_credentials):
+    """
+    The function is responsible of creating the template for each type of task
+    :param user_credentials: The user credentials object
+    :return: a dictionary of all tasks
+    """
+    tasks_dict = ({})
+
+    # Write tests
+    tasks_dict["WriteTests"] = {
+        'System.Title': 'Write Tests',  # Title
+        'Microsoft.VSTS.Common.BacklogPriority': '160',  # Backlog Priority
+        'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
+        'Microsoft.VSTS.Scheduling.RemainingWork': '',  # Remaining Work
+    }
+    # Run Tests
+    tasks_dict["RunTests"] = {
+        'System.Title': 'Run Tests',  # Title
+        'Microsoft.VSTS.Common.BacklogPriority': '180',  # Backlog Priority
+        'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
+        'Microsoft.VSTS.Scheduling.RemainingWork': '',  # Remaining Work
+    }
+    # Review tests
+    tasks_dict["ReviewTests"] = {
+        'System.Title': 'Review Tests',  # Title
+        'Microsoft.VSTS.Common.BacklogPriority': '170',  # Backlog Priority
+        'Microsoft.VSTS.Common.Activity': 'Requirements',  # Activity
+        'Microsoft.VSTS.Scheduling.RemainingWork': '0.5',  # Remaining Work
+        'System.AssignedTo': user_credentials['name'],  # Assigned to the System Analyst
+    }
+    # HLD
+    tasks_dict["HighLevelDesign"] = {
+        'System.Title': 'High Level Design',  # Title
+        'Microsoft.VSTS.Common.BacklogPriority': '10',  # Backlog Priority
+        'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
+        'Microsoft.VSTS.Scheduling.RemainingWork': '0',  # Remaining Work
+    }
+    # Release plan
+    tasks_dict["ReleasePlan"] = {
+        'System.Title': 'Release Plan',  # Title
+        'Microsoft.VSTS.Common.BacklogPriority': '150',  # Backlog Priority
+        'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
+        'Microsoft.VSTS.Scheduling.RemainingWork': '0.5',  # Remaining Work
+        'System.Description': "1) What needs to be released? including work order</br></br>2) Dependencies (other " +
+                              "PBIs, other teams)</br></br>3) PM Work (demo, content, security…)</br></br>4)" +
+                              "Release to all environments</br>* QA2 (full QA)</br>* Staging2</br>* Production " +
+                              "(feature sanity if possible)</br>* PerfCD</br>* ProdLikeCD"
+    }
+    # Remove toggle from code
+    tasks_dict["RemoveToggleCode"] = {
+        'System.Title': 'Remove toggle from code',  # Title
+        'Microsoft.VSTS.Common.BacklogPriority': '50',  # Backlog Priority
+        'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
+        'Microsoft.VSTS.Scheduling.RemainingWork': '',  # Remaining Work
+    }
+    # Remove toggle from consul
+    tasks_dict["RemoveToggleConsul"] = {
+        'System.Title': 'Remove toggle from consul',  # Title
+        'Microsoft.VSTS.Common.BacklogPriority': '60',  # Backlog Priority
+        'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
+        'Microsoft.VSTS.Scheduling.RemainingWork': '',  # Remaining Work
+    }
+    # Activate toggle
+    tasks_dict["ActivateToggle"] = {
+        'System.Title': 'Activate feature toggle',  # Title
+        'Microsoft.VSTS.Common.BacklogPriority': '50',  # Backlog Priority
+        'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
+        'Microsoft.VSTS.Scheduling.RemainingWork': '',  # Remaining Work
+    }
+    # Rollback plan
+    tasks_dict["Rollback"] = {
+        'System.Title': 'Rollback Plan',  # Title
+        'Microsoft.VSTS.Common.BacklogPriority': '20',  # Backlog Priority
+        'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
+        'Microsoft.VSTS.Scheduling.RemainingWork': '0',  # Remaining Work
+    }
+    # Notify
+    tasks_dict["Notify"] = {
+        'System.Title': 'Notify ...',  # Title
+        'Microsoft.VSTS.Common.BacklogPriority': '50',  # Backlog Priority
+        'Microsoft.VSTS.Common.Activity': 'Requirements',  # Activity
+        'Microsoft.VSTS.Scheduling.RemainingWork': '0',  # Remaining Work
+    }
+    # Exploratory Tests
+    tasks_dict["ExploratoryTests"] = {
+        'System.Title': 'Exploratory Tests',  # Title
+        'Microsoft.VSTS.Common.BacklogPriority': '180',  # Backlog Priority
+        'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
+        'Microsoft.VSTS.Scheduling.RemainingWork': '',  # Remaining Work
+    }
+
+    return tasks_dict
+
 
 def get_tasks(user_credentials, type):
     """
@@ -26,112 +119,31 @@ def get_tasks(user_credentials, type):
     :return: a list of dictionaries with the tasks fields
     """
 
+    available_tasks = __get_available_tasks(user_credentials)
     tasks = list([])
 
     if type == "RegularTasks":
-        # Write tests
-        tasks.append({
-            'System.Title': 'Write Tests',  # Title
-            'Microsoft.VSTS.Common.BacklogPriority': '160',  # Backlog Priority
-            'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
-            'Microsoft.VSTS.Scheduling.RemainingWork': '',  # Remaining Work
-        })
-        # Run Tests
-        tasks.append({
-            'System.Title': 'Run Tests',  # Title
-            'Microsoft.VSTS.Common.BacklogPriority': '180',  # Backlog Priority
-            'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
-            'Microsoft.VSTS.Scheduling.RemainingWork': '',  # Remaining Work
-        })
-        # Review tests
-        tasks.append({
-            'System.Title': 'Review Tests',  # Title
-            'Microsoft.VSTS.Common.BacklogPriority': '170',  # Backlog Priority
-            'Microsoft.VSTS.Common.Activity': 'Requirements',  # Activity
-            'Microsoft.VSTS.Scheduling.RemainingWork': '0.5',  # Remaining Work
-            'System.AssignedTo': user_credentials['name'],  # Assigned to the System Analyst
-        })
-        # HLD
-        tasks.append({
-            'System.Title': 'High Level Design',  # Title
-            'Microsoft.VSTS.Common.BacklogPriority': '10',  # Backlog Priority
-            'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
-            'Microsoft.VSTS.Scheduling.RemainingWork': '0',  # Remaining Work
-        })
-        # Release plan
-        tasks.append({
-            'System.Title': 'Release Plan',  # Title
-            'Microsoft.VSTS.Common.BacklogPriority': '150',  # Backlog Priority
-            'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
-            'Microsoft.VSTS.Scheduling.RemainingWork': '0.5',  # Remaining Work
-            'System.Description': "1) What needs to be released? including work order</br></br>2) Dependencies (other " +
-                                  "PBIs, other teams)</br></br>3) PM Work (demo, content, security…)</br></br>4)" +
-                                  "Release to all environments</br>* QA2 (full QA)</br>* Staging2</br>* Production " +
-                                  "(feature sanity if possible)</br>* PerfCD</br>* ProdLikeCD"
-        })
+        tasks.append(available_tasks["WriteTests"])
+        tasks.append(available_tasks["RunTests"])
+        tasks.append(available_tasks["ReviewTests"])
+        tasks.append(available_tasks["HighLevelDesign"])
+        tasks.append(available_tasks["ReleasePlan"])
 
     if type == "CleanupTasks":
-        # Remove toggle from code
-        tasks.append({
-            'System.Title': 'Remove toggle from code',  # Title
-            'Microsoft.VSTS.Common.BacklogPriority': '50',  # Backlog Priority
-            'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
-            'Microsoft.VSTS.Scheduling.RemainingWork': '',  # Remaining Work
-        })
-        # Remove toggle from consul
-        tasks.append({
-            'System.Title': 'Remove toggle from consul',  # Title
-            'Microsoft.VSTS.Common.BacklogPriority': '60',  # Backlog Priority
-            'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
-            'Microsoft.VSTS.Scheduling.RemainingWork': '',  # Remaining Work
-        })
-        # HLD
-        tasks.append({
-            'System.Title': 'High Level Design',  # Title
-            'Microsoft.VSTS.Common.BacklogPriority': '10',  # Backlog Priority
-            'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
-            'Microsoft.VSTS.Scheduling.RemainingWork': '0',  # Remaining Work
-        })
-        # Release plan
-        tasks.append({
-             'System.Title': 'Release Plan',                    # Title
-             'Microsoft.VSTS.Common.BacklogPriority': '150',    # Backlog Priority
-             'Microsoft.VSTS.Common.Activity': 'Development',   # Activity
-             'Microsoft.VSTS.Scheduling.RemainingWork': '0.5',  # Remaining Work
-             'System.Description': "1) What needs to be released? including work order</br></br>2) Dependencies (other " +
-                                   "PBIs, other teams)</br></br>3) PM Work (demo, content, security…)</br></br>4)" +
-                                   "Release to all environments</br>* QA2 (full QA)</br>* Staging2</br>* Production " +
-                                   "(feature sanity if possible)</br>* PerfCD</br>* ProdLikeCD"
-            })
+        tasks.append(available_tasks["RemoveToggleCode"])
+        tasks.append(available_tasks["RemoveToggleConsul"])
+        tasks.append(available_tasks["HighLevelDesign"])
+        tasks.append(available_tasks["ReleasePlan"])
 
     if type == "GoingLiveTasks":
-        # Activate toggle
-        tasks.append({
-            'System.Title': 'Activate feature toggle',  # Title
-            'Microsoft.VSTS.Common.BacklogPriority': '50',  # Backlog Priority
-            'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
-            'Microsoft.VSTS.Scheduling.RemainingWork': '',  # Remaining Work
-        })
-        # Rollback plan
-        tasks.append({
-            'System.Title': 'Rollback Plan',  # Title
-            'Microsoft.VSTS.Common.BacklogPriority': '20',  # Backlog Priority
-            'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
-            'Microsoft.VSTS.Scheduling.RemainingWork': '0',  # Remaining Work
-        })
-        # Notify
-        tasks.append({
-            'System.Title': 'Notify ...',  # Title
-            'Microsoft.VSTS.Common.BacklogPriority': '50',  # Backlog Priority
-            'Microsoft.VSTS.Common.Activity': 'Requirements',  # Activity
-            'Microsoft.VSTS.Scheduling.RemainingWork': '0',  # Remaining Work
-        })
-        # Exploratory Tests
-        tasks.append({
-            'System.Title': 'Exploratory Tests',  # Title
-            'Microsoft.VSTS.Common.BacklogPriority': '180',  # Backlog Priority
-            'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
-            'Microsoft.VSTS.Scheduling.RemainingWork': '',  # Remaining Work
-        })
+        tasks.append(available_tasks["ActivateToggle"])
+        tasks.append(available_tasks["Rollback"])
+        tasks.append(available_tasks["Notify"])
+        tasks.append(available_tasks["ExploratoryTests"])
+
+    if type == "E2ETasks":
+        tasks.append(available_tasks["WriteTests"])
+        tasks.append(available_tasks["RunTests"])
+        tasks.append(available_tasks["ReviewTests"])
 
     return tasks
