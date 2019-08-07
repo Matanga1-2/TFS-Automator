@@ -1,12 +1,15 @@
 import os
 import signal
 import threading
-from sys import exit
+from os import path
+from os import remove
+from os import environ
+from os import mkdir
 
 
 class Watchdog():
-    def __init__(self, timeout=10):
-        self.timeout = timeout
+    def __init__(self):
+        self.timeout = self.get_timeout()
         self._t = None
 
     def do_expire(self):
@@ -30,3 +33,23 @@ class Watchdog():
         if self._t is not None:
             self.stop()
             self.start()
+
+    def get_timeout(self, default=120):
+        file_path = "./watchdog_config.txt"
+        while True:
+            if path.exists(file_path):
+                f = open(file_path, "r")
+                try:
+                    timeout = f.readlines()[0]
+                    timeout = int(timeout)
+                    f.close()
+                    return timeout
+                except IndexError:
+                    f.close()
+                    remove(file_path)
+                    continue
+            else:
+                f = open(file_path, "w+")
+                f.write(str(default))
+                f.close()
+                return default

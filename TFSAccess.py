@@ -47,8 +47,7 @@ def main():
     retry = True
     user_credentials = ""
     tfs_instance = ""
-    timeout = 120
-    wd = watchdog.Watchdog(timeout)
+    wd = watchdog.Watchdog()
     wd.start()
 
     while retry:
