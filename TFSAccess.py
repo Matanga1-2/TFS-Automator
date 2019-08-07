@@ -77,9 +77,11 @@ def main():
                 or selected_operation.name == "CleanupTasks"\
                 or selected_operation.name == "GoingLiveTasks"\
                 or selected_operation.name == "E2ETasks":
-            manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials, type=selected_operation.name)
+            manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials, tasks_type=selected_operation.name)
         elif selected_operation.name == "CloneTasks":
-            manageTasks.clone_pbi_tasks(tfs_instance, user_credentials)
+            manageTasks.clone_pbi_tasks(tfs_instance)
+        elif selected_operation.name == "CreateCleanup":
+            manageTasks.copy_pbi_to_cleanup(tfs_instance, user_credentials)
 
         # check if need to continue
         if end_program():

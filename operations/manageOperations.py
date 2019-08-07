@@ -48,5 +48,6 @@ def initiate_operations():
     operations_list.append(OperationType(3, "GoingLiveTasks", "Add going live tasks to a PBI"))
     operations_list.append(OperationType(5, "CloneTasks", "Clone tasks between PBIs"))
     operations_list.append(OperationType(4, "E2ETasks", "Add E2E tasks to a PBI"))
+    operations_list.append(OperationType(6, "CreateCleanup", "Create a cleanup PBI from an existing PBI"))
 
     return operations_list
