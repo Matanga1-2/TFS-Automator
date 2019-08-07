@@ -7,6 +7,7 @@ from TFSConnect import TFS
 from credentials import handleCredentials
 from operations import manageTasks
 from operations import manageOperations
+from watchdog import watchdog
 
 
 def end_program():
@@ -46,6 +47,9 @@ def main():
     retry = True
     user_credentials = ""
     tfs_instance = ""
+    timeout = 120
+    wd = watchdog.Watchdog(timeout)
+    wd.start()
 
     while retry:
 
@@ -56,6 +60,7 @@ def main():
             # Get credentials for the connection
             try:
                 user_credentials = handleCredentials.get_credentials()
+                wd.refresh()
             except handleCredentials.CredentialsError:
                 continue
 
@@ -66,6 +71,7 @@ def main():
 
         operations = manageOperations.Operations()
         selected_operation = get_operation(operations)
+        wd.refresh()
         if selected_operation.name == "RegularTasks" \
                 or selected_operation.name == "CleanupTasks"\
                 or selected_operation.name == "GoingLiveTasks"\
@@ -79,6 +85,7 @@ def main():
             continue
         else:
             retry = False
+            wd.refresh()
             continue
     exit()
 
