@@ -1,6 +1,10 @@
 """
 The module is responsible for giving PBI and tasks information
 """
+import requests
+
+class WorkitemDoesntMatchIDError:
+    pass
 
 
 def get_pbi_id():
@@ -16,6 +20,7 @@ def get_pbi_id():
             print("Invalid ID. Try again")
         else:
             return pbi_id
+
 
 def __get_available_tasks(user_credentials):
     """
@@ -147,3 +152,74 @@ def get_tasks(user_credentials, type):
         tasks.append(available_tasks["ReviewTests"])
 
     return tasks
+
+
+def get_cleanup_pbi(tfs_instance, original_pbi_id):
+    """
+    The function returns
+    :param tfs_instance:
+    :param original_pbi_id:
+    :return: A dictionary with the cleanup fields ("data") and its parent_id ("parent_id") if exists
+    """
+
+    cleanup_pbi = ({})
+    cleanup_pbi["data"] = ({})
+    cleanup_pbi["parent_id"] = None
+
+    # Get PBI data
+    try:
+        original_pbi_data = tfs_instance.connection.get_workitem(original_pbi_id)
+    except requests.exceptions.HTTPError as error:
+        print('An HTTP error: {0}'.format(error))
+        return
+    except:
+        return
+
+    # Build the PBI fields
+    original_pbi_fields = original_pbi_data.fields
+
+    # Check if the PBI has a feature
+    try:
+        feature_id = original_pbi_data.parent_id
+    except:
+        feature_id = None
+    finally:
+        cleanup_pbi["parent_id"] = feature_id
+
+    # Only if type is "Product Backglog Item"
+    if original_pbi_fields["System.WorkItemType"] == "Product Backlog Item":
+
+        # Determine the cleanup item title
+        # has feature: {Feature name} + ': Cleanup'
+        # No feature: {PBI name} + ' - Cleanup'
+        if cleanup_pbi["parent_id"] is not None:
+            try:
+                feature_data = tfs_instance.connection.get_workitem(cleanup_pbi["parent_id"])
+                cleanup_pbi_title = feature_data["System.Title"] + ": Cleanup"
+            except:
+                cleanup_pbi_title = original_pbi_fields["System.Title"] + " - Cleanup"
+                pass
+        else:
+            cleanup_pbi_title = original_pbi_fields["System.Title"] + " - Cleanup"
+        cleanup_pbi["data"]["System.Title"] = cleanup_pbi_title
+
+        # Static fields
+        cleanup_pbi["data"]["System.State"] = "Approved"
+        cleanup_pbi["data"]["Microsoft.VSTS.Common.BusinessValue"] = "3001"
+        cleanup_pbi["data"]["Microsoft.VSTS.Scheduling.Effort"] = "0"
+        cleanup_pbi["data"]["System.Description"] = "Cleanup PBI"
+        cleanup_pbi["data"]["NetBet.ProductPreparationState"] = "Not Started"
+        cleanup_pbi["data"]["NetBet.TechnicalPreparationState"] = "Not Started"
+
+        # Fields that should be as the original PBI (if they have any value)
+        fields_to_copy = ["NetBet.FinancialEntity2", "System.AreaId", "System.IterationId",
+                          "NetBet.ProductPreparationAssignedTo", "NetBet.TechnicalPreparationAssignedTo"]
+        for field in fields_to_copy:
+            try:
+                cleanup_pbi["data"][field] = original_pbi_fields[field]
+            except:
+                pass
+    else:
+        raise WorkitemDoesntMatchIDError
+
+    return cleanup_pbi
