@@ -116,37 +116,43 @@ def __get_available_tasks(user_credentials):
     return tasks_dict
 
 
-def get_tasks(user_credentials, type):
+def get_tasks(user_credentials, pbi_type):
     """
     Function to get the tasks we want to add to the PBI
     :param user_credentials: a TFS credentials object
-    :param type: a string representing the type of tasks required, default is "regular"
+    :param pbi_type: a string representing the type of tasks required, default is "regular"
     :return: a list of dictionaries with the tasks fields
     """
 
     available_tasks = __get_available_tasks(user_credentials)
     tasks = list([])
 
-    if type == "RegularTasks":
+    if pbi_type == "RegularTasks":
         tasks.append(available_tasks["WriteTests"])
         tasks.append(available_tasks["RunTests"])
         tasks.append(available_tasks["ReviewTests"])
         tasks.append(available_tasks["HighLevelDesign"])
         tasks.append(available_tasks["ReleasePlan"])
 
-    if type == "CleanupTasks":
+    if pbi_type == "CleanupTasks":
         tasks.append(available_tasks["RemoveToggleCode"])
         tasks.append(available_tasks["RemoveToggleConsul"])
         tasks.append(available_tasks["HighLevelDesign"])
         tasks.append(available_tasks["ReleasePlan"])
+        tasks.append(available_tasks["ExploratoryTests"])
 
-    if type == "GoingLiveTasks":
+    if pbi_type == "ExploratoryTasks":
+        tasks.append(available_tasks["HighLevelDesign"])
+        tasks.append(available_tasks["ReleasePlan"])
+        tasks.append(available_tasks["ExploratoryTests"])
+
+    if pbi_type == "GoingLiveTasks":
         tasks.append(available_tasks["ActivateToggle"])
         tasks.append(available_tasks["Rollback"])
         tasks.append(available_tasks["Notify"])
         tasks.append(available_tasks["ExploratoryTests"])
 
-    if type == "E2ETasks":
+    if pbi_type == "E2ETasks":
         tasks.append(available_tasks["WriteTests"])
         tasks.append(available_tasks["RunTests"])
         tasks.append(available_tasks["ReviewTests"])

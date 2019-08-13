@@ -80,7 +80,7 @@ def copy_pbi_to_cleanup(tfs_instance, user_credentials):
 
     # Add cleanup tasks to the new PBI
     try:
-        add_tasks_to_pbi(tfs_instance, user_credentials, tasks_type="CleanupTasks", pbi_id=new_pbi)
+        add_tasks_to_pbi(tfs_instance, user_credentials, pbi_type="CleanupTasks", pbi_id=new_pbi)
     except requests.exceptions.HTTPError as error:
         print("Oops.. there was an HTTP error: {0}".format(error))
         return
@@ -104,13 +104,13 @@ def add_task_to_pbi(tfs_instance, task, pbi_data):
     print("Task " + str(new_task) + " was added successfully")
 
 
-def add_tasks_to_pbi(tfs_instance, user_credentials, pbi_id=None, tasks_type="regular"):
+def add_tasks_to_pbi(tfs_instance, user_credentials, pbi_id=None, pbi_type="regular"):
     """
     Add all of the required tasks to a PBI, based on a given type
     :param tfs_instance: the TFS connection
     :param user_credentials: the user credentials dictionary
     :param pbi_id: a given PBI to add the tasks to
-    :param tasks_type: the type of tasks to add
+    :param pbi_type: the type of tasks to add
     :return: nothing
     """
 
@@ -128,7 +128,7 @@ def add_tasks_to_pbi(tfs_instance, user_credentials, pbi_id=None, tasks_type="re
         return
 
     # Get tasks to add
-    tasks = getObjects.get_tasks(user_credentials, type=tasks_type)
+    tasks = getObjects.get_tasks(user_credentials, pbi_type=pbi_type)
 
     # Add tasks
     for task in tasks:
