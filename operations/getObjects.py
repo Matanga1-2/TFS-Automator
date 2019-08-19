@@ -3,7 +3,8 @@ The module is responsible for giving PBI and tasks information
 """
 import requests
 
-class WorkitemDoesntMatchIDError:
+
+class WorkitemDoesntMatchIDError(Exception):
     pass
 
 
