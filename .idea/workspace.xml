@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7392129f-4a83-4b67-a8bd-54c8024681c0" name="Default Changelist" comment="- Added &quot;remaining work&quot; to &quot;review tests&quot; task">
-      <change beforePath="$PROJECT_DIR$/.idea/TFS-Access.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/TFS-Access.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="7392129f-4a83-4b67-a8bd-54c8024681c0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/operations/getObjects.py" beforeDir="false" afterPath="$PROJECT_DIR$/operations/getObjects.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/operations/manageTasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/operations/manageTasks.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,22 +17,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TFSAccess.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1258">
-              <caret line="80" column="40" selection-start-line="80" selection-start-column="24" selection-end-line="80" selection-end-column="40" />
+            <state relative-caret-position="168">
+              <caret line="84" selection-start-line="84" selection-end-line="84" />
               <folding>
                 <element signature="e#124#150#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/operations/manageTasks.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="719">
-              <caret line="55" column="48" selection-start-line="55" selection-start-column="22" selection-end-line="55" selection-end-column="48" />
-              <folding>
-                <element signature="e#0#33#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -42,8 +29,23 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/operations/getObjects.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" selection-start-line="9" selection-end-line="9" />
+            <state relative-caret-position="279">
+              <caret line="176" selection-start-line="176" selection-end-line="176" />
+              <folding>
+                <element signature="e#71#86#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/operations/manageTasks.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="254">
+              <caret line="54" selection-start-line="54" selection-end-line="54" />
+              <folding>
+                <element signature="e#0#33#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -51,8 +53,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/operations/manageOperations.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="867">
-              <caret line="51" column="61" selection-start-line="51" selection-start-column="45" selection-end-line="51" selection-end-column="61" />
+            <state relative-caret-position="374">
+              <caret line="51" column="93" selection-start-line="51" selection-start-column="93" selection-end-line="51" selection-end-column="93" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/tfs/connection.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3706">
+              <caret line="224" selection-start-line="224" selection-end-line="224" />
             </state>
           </provider>
         </entry>
@@ -99,6 +110,7 @@
       <find>relation</find>
       <find>type=&quot;</find>
       <find>add_tasks_to_pbi</find>
+      <find>cleanup</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -119,19 +131,19 @@
         <option value="$PROJECT_DIR$/credentials/handleCredentials.py" />
         <option value="$PROJECT_DIR$/operations/operationType.py" />
         <option value="$PROJECT_DIR$/operations/watchdog/watchdog.py" />
-        <option value="$PROJECT_DIR$/watchdog_config.txt" />
         <option value="$PROJECT_DIR$/watchdog/watchdog.py" />
         <option value="$PROJECT_DIR$/config.txt" />
+        <option value="$PROJECT_DIR$/watchdog_config.txt" />
         <option value="$PROJECT_DIR$/operations/manageOperations.py" />
-        <option value="$PROJECT_DIR$/TFSAccess.py" />
         <option value="$PROJECT_DIR$/operations/manageTasks.py" />
+        <option value="$PROJECT_DIR$/TFSAccess.py" />
         <option value="$PROJECT_DIR$/operations/getObjects.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
+    <option name="x" value="172" />
+    <option name="y" value="205" />
     <option name="width" value="1936" />
     <option name="height" value="1056" />
   </component>
@@ -143,37 +155,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="TFS-Access" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TFS-Access" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TFS-Access" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TFS-Access" type="462c0819:PsiDirectoryNode" />
-              <item name="credentials" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TFS-Access" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TFS-Access" type="462c0819:PsiDirectoryNode" />
-              <item name="operations" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TFS-Access" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TFS-Access" type="462c0819:PsiDirectoryNode" />
-              <item name="TFSConnect" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TFS-Access" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TFS-Access" type="462c0819:PsiDirectoryNode" />
-              <item name="watchdog" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="Scope">
         <subPane subId="Scope 'Changed Files'; set:Changed Files; ALL; class com.intellij.packageDependencies.ChangeListScope">
           <expand>
@@ -204,6 +185,37 @@
               <item name="TFS-Access" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
               <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
               <item name="TFSConnect" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="TFS-Access" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TFS-Access" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TFS-Access" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TFS-Access" type="462c0819:PsiDirectoryNode" />
+              <item name="credentials" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TFS-Access" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TFS-Access" type="462c0819:PsiDirectoryNode" />
+              <item name="operations" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TFS-Access" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TFS-Access" type="462c0819:PsiDirectoryNode" />
+              <item name="TFSConnect" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TFS-Access" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TFS-Access" type="462c0819:PsiDirectoryNode" />
+              <item name="watchdog" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -396,20 +408,33 @@
       <option name="project" value="LOCAL" />
       <updated>1565693688961</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="- Fixed the wrong ID exception">
+      <created>1566196772555</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1566196772555</updated>
+    </task>
+    <task id="LOCAL-00019" summary="- Added predecessor relation to cleanup pbi">
+      <created>1566364110245</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1566364110245</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22814499" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23614073" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3276923" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.30877572" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39846155" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.39761648" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -459,10 +484,28 @@
     <MESSAGE value="- Implemented watchdog" />
     <MESSAGE value="- Updated watchdog to use config value" />
     <MESSAGE value="- Added &quot;Exploratory Tests&quot; option" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Added &quot;Exploratory Tests&quot; option" />
+    <MESSAGE value="- Fixed the wrong ID exception" />
+    <MESSAGE value="- Added predecessor relation to cleanup pbi" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Added predecessor relation to cleanup pbi" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/operations/getObjects.py</url>
+          <line>176</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>update_data</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>original_pbi[&quot;System.WorkItemType&quot;] == &quot;Product Backlog Item&quot;</expression-string>
         <language-id>Python</language-id>
@@ -503,11 +546,6 @@
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
-      <expression>
-        <expression-string>operations.operations_list</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
@@ -536,13 +574,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/tfs/resources.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
-          <caret line="241" selection-start-line="241" selection-end-line="241" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/codecs.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
@@ -557,22 +588,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/tfs/connection.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5168">
-          <caret line="310" selection-start-line="310" selection-end-line="310" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/operations/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/watchdog_config.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="3" selection-start-column="3" selection-end-column="3" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/credentials/handleCredentials.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -594,27 +611,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/watchdog_config.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="4" selection-start-column="4" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/tfs/connection.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3706">
+          <caret line="224" selection-start-line="224" selection-end-line="224" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/tfs/resources.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="339">
+          <caret line="345" selection-start-line="345" selection-end-line="345" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/config.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
           <caret line="3" column="5" selection-start-line="3" selection-start-column="5" selection-end-line="3" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TFSAccess.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1258">
-          <caret line="80" column="40" selection-start-line="80" selection-start-column="24" selection-end-line="80" selection-end-column="40" />
-          <folding>
-            <element signature="e#124#150#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/operations/manageOperations.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="867">
-          <caret line="51" column="61" selection-start-line="51" selection-start-column="45" selection-end-line="51" selection-end-column="61" />
         </state>
       </provider>
     </entry>
@@ -628,10 +649,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/operations/manageOperations.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="51" column="93" selection-start-line="51" selection-start-column="93" selection-end-line="51" selection-end-column="93" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TFSAccess.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="84" selection-start-line="84" selection-end-line="84" />
+          <folding>
+            <element signature="e#124#150#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/operations/manageTasks.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="719">
-          <caret line="55" column="48" selection-start-line="55" selection-start-column="22" selection-end-line="55" selection-end-column="48" />
+        <state relative-caret-position="254">
+          <caret line="54" selection-start-line="54" selection-end-line="54" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
           </folding>
@@ -640,8 +678,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/operations/getObjects.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
+        <state relative-caret-position="279">
+          <caret line="176" selection-start-line="176" selection-end-line="176" />
+          <folding>
+            <element signature="e#71#86#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

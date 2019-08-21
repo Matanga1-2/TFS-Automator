@@ -2,6 +2,7 @@
 The module is responsible for giving PBI and tasks information
 """
 import requests
+import re
 
 
 class WorkitemDoesntMatchIDError(Exception):
@@ -161,6 +162,24 @@ def get_tasks(user_credentials, pbi_type):
     return tasks
 
 
+def __get_next_iteration(original_pbi_data):
+    """
+    Get the next iteration path for a given PBI
+    :param original_pbi_data: A TFS workitem object
+    :return: A string of the next iteration path
+    """
+
+    iteration_path = original_pbi_data["System.IterationPath"]
+    iteration_number = re.search(r'\s+\d+', iteration_path)
+    if iteration_number:
+        iteration_number = iteration_number.group(0).replace(' ','')
+        next_iteration_number = str(int(iteration_number) + 1)
+        next_iteration_path = re.sub(iteration_number, next_iteration_number, iteration_path)
+    else:
+        next_iteration_path = iteration_path
+    return next_iteration_path
+
+
 def get_cleanup_pbi(tfs_instance, original_pbi_id):
     """
     The function returns
@@ -217,9 +236,10 @@ def get_cleanup_pbi(tfs_instance, original_pbi_id):
         cleanup_pbi["data"]["System.Description"] = "Cleanup PBI"
         cleanup_pbi["data"]["NetBet.ProductPreparationState"] = "Not Started"
         cleanup_pbi["data"]["NetBet.TechnicalPreparationState"] = "Not Started"
+        cleanup_pbi["data"]["System.IterationPath"] = __get_next_iteration(original_pbi_data)
 
         # Fields that should be as the original PBI (if they have any value)
-        fields_to_copy = ["NetBet.FinancialEntity2", "System.AreaId", "System.IterationId",
+        fields_to_copy = ["NetBet.FinancialEntity2", "System.AreaId",
                           "NetBet.ProductPreparationAssignedTo", "NetBet.TechnicalPreparationAssignedTo"]
         for field in fields_to_copy:
             try:
