@@ -71,12 +71,22 @@ def copy_pbi_to_cleanup(tfs_instance, user_credentials):
     try:
         relation_url = """https://tfs2018.net-bet.net/tfs/DefaultCollection/154f45b9-7e72-44b9-bd28-225c488dfde2/
             _apis/wit/workItems/"""
-        relations = [{'rel': 'System.LinkTypes.Related',  # related
-                      'url': relation_url + str(original_pbi_id)
-                      }]
+        relations = ([])
+        relations.append({'rel': 'System.LinkTypes.Related', 'url': relation_url + str(original_pbi_id)})
+        relations.append({'rel': 'System.LinkTypes.Dependency-Reverse', 'url': relation_url + str(original_pbi_id)})
         new_pbi_data.add_relations_raw(relations)
     except:
         pass
+
+    # # Add the predecessor relation
+    # try:
+    #     relation_url = """https://tfs2018.net-bet.net/tfs/DefaultCollection/154f45b9-7e72-44b9-bd28-225c488dfde2/
+    #         _apis/wit/workItems/"""
+    #     relations = ([{}])
+    #     relations[0] = {'rel': 'System.LinkTypes.Dependency-Reverse', 'url': relation_url + str(original_pbi_id)}
+    #     new_pbi_data.add_relations_raw(relations)
+    # except:
+    #     pass
 
     # Add cleanup tasks to the new PBI
     try:
