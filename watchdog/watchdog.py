@@ -1,51 +1,88 @@
+"""
+The Watchdog module created a generic watchdog implementation to handle
+the program timeout.
+Once the instance is created it is updated againt everey user activity.
+Once expired, the program is terminated.
+"""
+
 import signal
 import threading
 import os
 
 
-class Watchdog():
+class Watchdog:
+    """
+    Watchdog class that handled the program timeout
+    """
     def __init__(self):
         self.timeout = self.get_timeout()
         self._t = None
 
-    def do_expire(self):
+    @staticmethod
+    def do_expire():
+        """
+        Closes the program
+        :return: None
+        """
         os.kill(os.getpid(), signal.SIGTERM)
 
     def _expire(self):
+        """
+        Expires the program
+        :return: None
+        """
         print("\nWatchdog expire")
         self.do_expire()
 
     def start(self):
+        """
+        Start monitoring the user actions
+        :return: None
+        """
         if self._t is None:
             self._t = threading.Timer(self.timeout, self._expire)
             self._t.start()
 
     def stop(self):
+        """
+        Stops the monitoring
+        :return: None
+        """
         if self._t is not None:
             self._t.cancel()
             self._t = None
 
     def refresh(self):
+        """
+        Once the watchdog is refreshed, it restart itself
+        :return:
+        """
         if self._t is not None:
             self.stop()
             self.start()
 
-    def get_timeout(self, default=120):
+    @staticmethod
+    def get_timeout(default=120):
+        """
+        Get the timout setup from config
+        :param default:
+        :return: timeout in seconds
+        """
         file_path = "./watchdog_config.txt"
         while True:
             if os.path.exists(file_path):
-                f = open(file_path, "r")
+                config_file = open(file_path, "r")
                 try:
-                    timeout = f.readlines()[0]
+                    timeout = config_file.readlines()[0]
                     timeout = int(timeout)
-                    f.close()
+                    config_file.close()
                     return timeout
                 except IndexError:
-                    f.close()
+                    config_file.close()
                     os.remove(file_path)
                     continue
             else:
-                f = open(file_path, "w+")
-                f.write(str(default))
-                f.close()
+                config_file = open(file_path, "w+")
+                config_file.write(str(default))
+                config_file.close()
                 return default

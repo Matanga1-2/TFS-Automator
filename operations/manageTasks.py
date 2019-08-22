@@ -19,7 +19,7 @@ def copy_task(tfs_instance, original_task_data, target_pbi_data):
         target_task = ({})
         try:
             target_task["System.State"] = "To Do"
-            target_task["System.AreaId"] = target_pbi_data['System.AreaId']
+            target_task["System.AreaId"] = target_pbi_data["System.AreaId"]
             target_task["System.IterationId"] = target_pbi_data["System.IterationId"]
             target_task["System.Title"] = original_task["System.Title"]
             target_task["Microsoft.VSTS.Common.BacklogPriority"] = original_task["Microsoft.VSTS.Common.BacklogPriority"]
@@ -41,8 +41,7 @@ def copy_pbi_to_cleanup(tfs_instance, user_credentials):
     """
     Function to duplicate a PBI in the same feature if available
     :param tfs_instance: the TFS connection
-    :param original_pbi_data: a TFS work item object of the PBI to copy
-    :param target_feature_data: the target feature data (None if there is none)
+    :param user_credentials: the credentials
     :return: the new PBI ID
     """
 

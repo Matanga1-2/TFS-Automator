@@ -1,8 +1,12 @@
-from tfs import TFSAPI
+"""
+The module manages the connection to the TFS server
+"""
+
 from requests_ntlm import HttpNtlmAuth
+from tfs import TFSAPI
 
 
-class TFSConnection (TFSAPI):
+class TFSConnection(TFSAPI):
     """
     this class represents a TFS connection.
     Once initialized and connected properly, it can be used to retrieve/update data from TFS
@@ -13,10 +17,7 @@ class TFSConnection (TFSAPI):
         self.password = tfs_password
         self.project = tfs_project
         self.connection = None
-        self.connection = TFSAPI(
-            self.uri, project=self.project,
-            user=self.username, password=self.password, auth_type=HttpNtlmAuth
-        )
+        self.connect_to_tfs()
 
     def add_workitem(self, item_fields, parent_item_id=None, workitem_type="Task"):
         """
@@ -31,16 +32,26 @@ class TFSConnection (TFSAPI):
             workitem_type = "Product Backlog Item"
 
         if parent_item_id is not None:
-            relation_url = """https://tfs2018.net-bet.net/tfs/DefaultCollection/154f45b9-7e72-44b9-bd28-225c488dfde2/
-                _apis/wit/workItems/"""
+            relation_url = """https://tfs2018.net-bet.net/tfs/DefaultCollection/
+                154f45b9-7e72-44b9-bd28-225c488dfde2/_apis/wit/workItems/"""
             relations = [{'rel': 'System.LinkTypes.Hierarchy-Reverse',  # parent
                           'url': relation_url + str(parent_item_id)
                           }
                          ]
-            new_workitem = self.connection.create_workitem(workitem_type, fields=item_fields, relations_raw=relations)
+            new_workitem = self.connection.create_workitem(workitem_type,
+                                                           fields=item_fields,
+                                                           relations_raw=relations)
         else:
             new_workitem = self.connection.create_workitem(workitem_type, fields=item_fields)
 
         return new_workitem.id
 
-
+    def connect_to_tfs(self):
+        """
+        Creates a TFS server connection and assign it to the object
+        :return: None
+        """
+        self.connection = TFSAPI(
+            self.uri, project=self.project,
+            user=self.username, password=self.password, auth_type=HttpNtlmAuth
+        )

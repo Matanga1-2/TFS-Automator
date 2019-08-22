@@ -1,3 +1,7 @@
+"""
+The module handles the user credentials managing
+"""
+
 from os import path
 from os import remove
 from os import environ
@@ -5,7 +9,9 @@ from os import mkdir
 
 
 class CredentialsError(Exception):
-    pass
+    """
+    An error indicating there was a problem with the user credentials
+    """
 
 
 def get_credentials():
@@ -26,21 +32,22 @@ def get_credentials():
         mkdir(credentials_folder)
 
     if path.exists(credentials_file):
-        f = open(credentials_file, "r")
+        cred_file = open(credentials_file, "r")
         try:
-            if f.mode == 'r':
-                credentials_input = f.readlines()
+            if cred_file.mode == 'r':
+                credentials_input = cred_file.readlines()
                 credentials['userName'] = credentials_input[0].rstrip()
                 credentials['password'] = credentials_input[1].rstrip()
                 credentials['uri'] = credentials_input[2].rstrip()
                 credentials['project'] = credentials_input[3].rstrip()
-                credentials['name'] = credentials_input[4].rstrip().replace(r'\\',r'\'').replace(r"'","")
-                f.close()
+                credentials['name'] = credentials_input[4].\
+                    rstrip().replace(r'\\', r'\'').replace(r"'", "")
+                cred_file.close()
             else:
                 print("There was an error getting the credentials. Please try again")
                 raise CredentialsError
         except IndexError:
-            f.close()
+            cred_file.close()
             remove(credentials_file)
             print("There was a problem reading your credentials. Please try again...")
             raise CredentialsError
@@ -50,16 +57,17 @@ def get_credentials():
         credentials['password'] = input("What is your TFS password? ")
         first_name = input("What is your first name? ")
         last_name = input("What is your last name? ")
-        credentials['name'] = first_name + " " + last_name + "<NET-BET\\" + first_name + last_name[0] + ">"
+        credentials['name'] = "{0} {1}<NET-BET\\{0}{2}>".format(first_name, last_name,
+                                                                last_name[0])
         credentials['uri'] = "https://tfs2018.net-bet.net/tfs/DefaultCollection/"
         credentials['project'] = "theLotter"
 
         # Save credentials in config file
-        f = open(credentials_file, "w+")
-        f.write(credentials['userName'] + "\n")
-        f.write(credentials['password'] + "\n")
-        f.write(credentials['uri'] + "\n")
-        f.write(credentials['project'] + "\n")
-        f.write(credentials['name'] + "\n")
-        f.close()
+        cred_file = open(credentials_file, "w+")
+        cred_file.write(credentials['userName'] + "\n")
+        cred_file.write(credentials['password'] + "\n")
+        cred_file.write(credentials['uri'] + "\n")
+        cred_file.write(credentials['project'] + "\n")
+        cred_file.write(credentials['name'] + "\n")
+        cred_file.close()
     return credentials

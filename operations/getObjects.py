@@ -172,7 +172,7 @@ def __get_next_iteration(original_pbi_data):
     iteration_path = original_pbi_data["System.IterationPath"]
     iteration_number = re.search(r'\s+\d+', iteration_path)
     if iteration_number:
-        iteration_number = iteration_number.group(0).replace(' ','')
+        iteration_number = iteration_number.group(0).replace(' ', '')
         next_iteration_number = str(int(iteration_number) + 1)
         next_iteration_path = re.sub(iteration_number, next_iteration_number, iteration_path)
     else:
@@ -206,11 +206,9 @@ def get_cleanup_pbi(tfs_instance, original_pbi_id):
 
     # Check if the PBI has a feature
     try:
-        feature_id = original_pbi_data.parent_id
+        cleanup_pbi["parent_id"] = original_pbi_data.parent_id
     except:
-        feature_id = None
-    finally:
-        cleanup_pbi["parent_id"] = feature_id
+        cleanup_pbi["parent_id"] = None
 
     # Only if type is "Product Backglog Item"
     if original_pbi_fields["System.WorkItemType"] == "Product Backlog Item":

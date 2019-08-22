@@ -3,21 +3,22 @@ The program handles managing work items in TFS.
 It uses Dohq package(https://devopshq.github.io/tfs/examples.html)
 """
 
-from TFSConnect import TFS
-from credentials import handleCredentials
+import os
+import signal
+from tfs_connect import tfs
+from credentials import handle_credentials
 from operations import manageTasks
 from operations import manageOperations
 from watchdog import watchdog
-import os
-import signal
 
 
 def end_program():
+    """
+    The function checks if the user wants to end the program
+    :return: True/False
+    """
     user_response = input("Enter any character and press enter to handle another PBI: ")
-    if user_response != "":
-        return True
-    else:
-        return False
+    return bool(user_response != "")
 
 
 def get_operation(operations):
@@ -34,7 +35,8 @@ def get_operation(operations):
 
     while retry:
         selected_operation_ordinal_number = input("Please select the required operation:")
-        selected_operation = operations.get_operation_by_ordinal_number(selected_operation_ordinal_number)
+        selected_operation = \
+            operations.get_operation_by_ordinal_number(selected_operation_ordinal_number)
         if selected_operation is None:
             print("Please try again...")
         else:
@@ -49,8 +51,8 @@ def main():
     retry = True
     user_credentials = ""
     tfs_instance = ""
-    wd = watchdog.Watchdog()
-    wd.start()
+    watch_dog = watchdog.Watchdog()
+    watch_dog.start()
 
     while retry:
 
@@ -60,25 +62,28 @@ def main():
         if user_credentials == "":
             # Get credentials for the connection
             try:
-                user_credentials = handleCredentials.get_credentials()
-                wd.refresh()
-            except handleCredentials.CredentialsError:
+                user_credentials = handle_credentials.get_credentials()
+                watch_dog.refresh()
+            except handle_credentials.CredentialsError:
                 continue
 
         if tfs_instance == "":
             # Initialize a new TFS connection
-            tfs_instance = TFS.TFSConnection(user_credentials['uri'], user_credentials['project'],
-                                             user_credentials['userName'], user_credentials['password'])
+            tfs_instance = tfs.TFSConnection(user_credentials['uri'],
+                                             user_credentials['project'],
+                                             user_credentials['userName'],
+                                             user_credentials['password'])
 
         operations = manageOperations.Operations()
         selected_operation = get_operation(operations)
-        wd.refresh()
+        watch_dog.refresh()
         if selected_operation.name == "RegularTasks" \
                 or selected_operation.name == "CleanupTasks"\
                 or selected_operation.name == "GoingLiveTasks"\
                 or selected_operation.name == "E2ETasks"\
                 or selected_operation.name == "ExploratoryTasks":
-            manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials, pbi_type=selected_operation.name)
+            manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials,
+                                         pbi_type=selected_operation.name)
         elif selected_operation.name == "CloneTasks":
             manageTasks.clone_pbi_tasks(tfs_instance)
         elif selected_operation.name == "CreateCleanup":
@@ -89,7 +94,7 @@ def main():
             continue
         else:
             retry = False
-            wd.refresh()
+            watch_dog.refresh()
             continue
     os.kill(os.getpid(), signal.SIGTERM)
 
