@@ -5,6 +5,7 @@ It uses Dohq package(https://devopshq.github.io/tfs/examples.html)
 
 import os
 import signal
+from time import sleep
 from tfs_connect import tfs
 from credentials import handle_credentials
 from operations import manageTasks
@@ -33,6 +34,7 @@ def get_operation(operations):
     for operation in operations.get_operations_list_ordered():
         print(operation)
 
+    print()
     while retry:
         selected_operation_ordinal_number = input("Please select the required operation:")
         selected_operation = \
@@ -41,6 +43,27 @@ def get_operation(operations):
             print("Please try again...")
         else:
             return selected_operation
+
+
+def print_welcome_message():
+    """
+    The function prints the welcome message
+    :return: None
+    """
+    print()
+    print("Hello! And welcome to the...")
+    sleep(0.5)
+    print()
+    print(r" _____ ______  _____    ___          _                             _                ")
+    print(r"|_   _||  ___|/  ___|  / _ \        | |                           | |               ")
+    print(r"  | |  | |_   \ `--.  / /_\ \ _   _ | |_   ___   _ __ ___    __ _ | |_   ___   _ __ ")
+    print(r"  | |  |  _|   `--. \ |  _  || | | || __| / _ \ | '_ ` _ \  / _` || __| / _ \ | '__|")
+    print(r"  | |  | |    /\__/ / | | | || |_| || |_ | (_) || | | | | || (_| || |_ | (_) || |   ")
+    print(r"  \_/  \_|    \____/  \_| |_/ \__,_| \__| \___/ |_| |_| |_| \__,_| \__| \___/ |_|   ")
+    print(r"                                                                                    ")
+    sleep(1)
+    print("What would you like to do?")
+    print()
 
 
 def main():
@@ -56,9 +79,8 @@ def main():
 
     while retry:
 
-        print()
-        print("Hello! Welcome the the TFS Assistant...")
-        print()
+        print_welcome_message()
+
         if user_credentials == "":
             # Get credentials for the connection
             try:
