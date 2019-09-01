@@ -13,11 +13,12 @@ from operations import manageOperations
 from watchdog import watchdog
 
 
-def end_program():
+def continue_program():
     """
     The function checks if the user wants to end the program
     :return: True/False
     """
+    print()
     user_response = input("Enter any character and press enter to handle another PBI: ")
     return bool(user_response != "")
 
@@ -61,9 +62,6 @@ def print_welcome_message():
     print(r"  | |  | |    /\__/ / | | | || |_| || |_ | (_) || | | | | || (_| || |_ | (_) || |   ")
     print(r"  \_/  \_|    \____/  \_| |_/ \__,_| \__| \___/ |_| |_| |_| \__,_| \__| \___/ |_|   ")
     print(r"                                                                                    ")
-    sleep(1)
-    print("What would you like to do?")
-    print()
 
 
 def main():
@@ -77,9 +75,12 @@ def main():
     watch_dog = watchdog.Watchdog()
     watch_dog.start()
 
-    while retry:
+    print_welcome_message()
 
-        print_welcome_message()
+    while retry:
+        sleep(1)
+        print("What would you like to do?")
+        print()
 
         if user_credentials == "":
             # Get credentials for the connection
@@ -112,7 +113,8 @@ def main():
             manageTasks.copy_pbi_to_cleanup(tfs_instance, user_credentials)
 
         # check if need to continue
-        if end_program():
+        if continue_program():
+            print()
             continue
         else:
             retry = False
