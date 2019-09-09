@@ -47,7 +47,7 @@ def copy_pbi_to_cleanup(tfs_instance, user_credentials):
 
     # Get the original PBI ID
     print("Please enter the original PBI ID")
-    original_pbi_id = getObjects.get_pbi_id()
+    original_pbi_id = getObjects.get_item_id()
 
     # Get the cleanup PBI tasks
     try:
@@ -76,16 +76,6 @@ def copy_pbi_to_cleanup(tfs_instance, user_credentials):
         new_pbi_data.add_relations_raw(relations)
     except:
         pass
-
-    # # Add the predecessor relation
-    # try:
-    #     relation_url = """https://tfs2018.net-bet.net/tfs/DefaultCollection/154f45b9-7e72-44b9-bd28-225c488dfde2/
-    #         _apis/wit/workItems/"""
-    #     relations = ([{}])
-    #     relations[0] = {'rel': 'System.LinkTypes.Dependency-Reverse', 'url': relation_url + str(original_pbi_id)}
-    #     new_pbi_data.add_relations_raw(relations)
-    # except:
-    #     pass
 
     # Add cleanup tasks to the new PBI
     try:
@@ -125,7 +115,7 @@ def add_tasks_to_pbi(tfs_instance, user_credentials, pbi_id=None, pbi_type="regu
 
     # Ask for PBI ID
     if pbi_id is None:
-        pbi_id = getObjects.get_pbi_id()
+        pbi_id = getObjects.get_item_id()
 
     # Get the PBI data
     try:
@@ -153,7 +143,7 @@ def clone_pbi_tasks(tfs_instance):
 
     # Ask for the first PBI ID
     print("You need to specify the source PBI ID")
-    source_pbi_id = getObjects.get_pbi_id()
+    source_pbi_id = getObjects.get_item_id()
 
     # Get the first PBI data
     try:
@@ -166,7 +156,7 @@ def clone_pbi_tasks(tfs_instance):
 
     # Ask for the second PBI ID
     print("You need to specify the target PBI ID")
-    target_pbi_id = getObjects.get_pbi_id()
+    target_pbi_id = getObjects.get_item_id()
 
     # Get the second PBI data
     try:
@@ -182,3 +172,91 @@ def clone_pbi_tasks(tfs_instance):
         task = tfs_instance.connection.get_workitem(task_id)
         copy_task(tfs_instance, task, target_pbi_data)
 
+
+def remove_pbi_with_tasks(tfs_instance, user_credentials):
+    """
+    The function will get a PBI number and remove it and its tasks.
+    Remove is changing the state, area, and iteration.
+    :param tfs_instance: the TFS connection
+    :param user_credentials: the user credentials
+    :return: nothing
+    """
+
+    # Ask for the PBI ID
+    pbi_id = getObjects.get_item_id()
+
+    # Get the PBI data
+    try:
+        pbi_data = tfs_instance.connection.get_workitem(pbi_id)
+    except requests.exceptions.HTTPError as error:
+        print('An HTTP error: {0}'.format(error))
+        return
+    except:
+        return
+
+    # Remove tasks
+    for task_id in pbi_data.child_ids:
+        try:
+            remove_task(tfs_instance, user_credentials, task_id)
+        except requests.exceptions.HTTPError as error:
+            print('An HTTP error: {0}'.format(error))
+            return
+        except:
+            print('Oops.. Something went wrong. Please try again')
+            return
+
+    # Remove the PBI
+    update_data = getObjects.get_removed_task_data(user_credentials)
+    try:
+        tfs_instance.connection.update_workitem(pbi_id, update_data)
+        print('PBI {0} was removed successfully'.format(pbi_id))
+    except requests.exceptions.HTTPError as error:
+        print('An HTTP error: {0}'.format(error))
+        return
+    except:
+        print('Oops.. Something went wrong. Please try again')
+        return
+
+
+def remove_task(tfs_instance, user_credentials, task_id):
+    """
+    The function will get a Task number and remove it and its tasks.
+    Remove is changing the state, area, and iteration.
+    :param tfs_instance: the TFS connection
+    :param user_credentials: the user credentials
+    :param task_id: the ID of the task to be removed
+    :return: nothing
+    """
+    task_data = tfs_instance.connection.get_workitem(task_id)
+    relations = task_data.data.get('relations')
+    for rel in range(len(relations)):
+        update_data = getObjects.get_removed_task_data(user_credentials, rel_count=1)
+        try:
+            tfs_instance.connection.update_workitem(work_item_id=task_id, update_data=update_data)
+            print('Task {0} was removed successfully'.format(task_id))
+        except requests.exceptions.HTTPError as error:
+            print('An HTTP error: {0}'.format(error))
+            return
+        except:
+            print('Oops.. Something went wrong. Please try again')
+
+
+def remove_task_from_pbi(tfs_instance, user_credentials):
+    """
+    The function will ask for a Task number from the user, and remove it.
+    :param tfs_instance: the TFS connection
+    :param user_credentials: the user credentials
+    :return: nothing
+    """
+    # Ask for the task ID
+    task_id = getObjects.get_item_id()
+
+    # Remove the task
+    try:
+        remove_task(tfs_instance, user_credentials, task_id)
+    except requests.exceptions.HTTPError as error:
+        print('An HTTP error: {0}'.format(error))
+        return
+    except:
+        print('Oops.. Something went wrong. Please try again')
+        return

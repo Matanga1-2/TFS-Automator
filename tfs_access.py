@@ -111,6 +111,10 @@ def main():
             manageTasks.clone_pbi_tasks(tfs_instance)
         elif selected_operation.name == "CreateCleanup":
             manageTasks.copy_pbi_to_cleanup(tfs_instance, user_credentials)
+        elif selected_operation.name == "RemovePBITasks":
+            manageTasks.remove_pbi_with_tasks(tfs_instance, user_credentials)
+        elif selected_operation.name == "RemoveTask":
+            manageTasks.remove_task_from_pbi(tfs_instance, user_credentials)
 
         # check if need to continue
         if continue_program():

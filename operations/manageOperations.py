@@ -50,5 +50,7 @@ def initiate_operations():
     operations_list.append(OperationType(5, "E2ETasks", "Add E2E tasks to a PBI"))
     operations_list.append(OperationType(7, "CreateCleanup", "Create a cleanup PBI from an existing PBI"))
     operations_list.append(OperationType(4, "ExploratoryTasks", "Add exploratory tasks PBI"))
+    operations_list.append(OperationType(8, "RemoveTask", "Remove a task"))
+    operations_list.append(OperationType(9, "RemovePBITasks", "Remove a PBI and its tasks"))
 
     return operations_list

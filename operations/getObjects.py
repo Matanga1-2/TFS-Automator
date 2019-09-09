@@ -9,15 +9,15 @@ class WorkitemDoesntMatchIDError(Exception):
     pass
 
 
-def get_pbi_id():
+def get_item_id():
     """
-    The function gets a PBI number from the user.
-    :return: An integer representing the PBI ID
+    The function gets an item number from the user.
+    :return: An integer representing the item ID
     """
 
     while True:
         try:
-            pbi_id = int(input("Enter PBI ID:"))
+            pbi_id = int(input("Enter Item ID:"))
         except:
             print("Invalid ID. Try again")
         else:
@@ -248,3 +248,30 @@ def get_cleanup_pbi(tfs_instance, original_pbi_id):
         raise WorkitemDoesntMatchIDError
 
     return cleanup_pbi
+
+
+def get_removed_task_data(user_credentials, rel_count=0):
+    """
+    The function is responsible of creating the template for a removed task
+    :return: a dictionary with the task
+    """
+    optimizers_area_path = user_credentials['project'] + r'\Optimizers'
+    optimizers_iteration_path = user_credentials['project'] + r'\Optimizers'
+
+    task_data = {
+        'System.State': 'Removed',
+        'System.AreaPath': optimizers_area_path,
+        'System.IterationPath': optimizers_iteration_path
+    }
+
+    task_dict = [dict(op="add", path='/fields/{}'.format(name), value=value) for name, value in task_data.items()] \
+        if task_data else []
+
+    if rel_count > 0:
+        for rel in range(rel_count):
+            task_dict.append({
+                "op": "remove",
+                "path": "/relations/" + str(rel)
+            })
+
+    return task_dict
