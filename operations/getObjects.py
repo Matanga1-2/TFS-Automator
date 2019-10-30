@@ -103,7 +103,7 @@ def __get_available_tasks(user_credentials):
     # Notify
     tasks_dict["Notify"] = {
         'System.Title': 'Notify ...',  # Title
-        'Microsoft.VSTS.Common.BacklogPriority': '50',  # Backlog Priority
+        'Microsoft.VSTS.Common.BacklogPriority': '190',  # Backlog Priority
         'Microsoft.VSTS.Common.Activity': 'Requirements',  # Activity
         'Microsoft.VSTS.Scheduling.RemainingWork': '0',  # Remaining Work
     }
@@ -111,6 +111,13 @@ def __get_available_tasks(user_credentials):
     tasks_dict["ExploratoryTests"] = {
         'System.Title': 'Exploratory Tests',  # Title
         'Microsoft.VSTS.Common.BacklogPriority': '180',  # Backlog Priority
+        'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
+        'Microsoft.VSTS.Scheduling.RemainingWork': '',  # Remaining Work
+    }
+    # General task
+    tasks_dict["Requirement"] = {
+        'System.Title': 'Requirement',  # Title
+        'Microsoft.VSTS.Common.BacklogPriority': '20',  # Backlog Priority
         'Microsoft.VSTS.Common.Activity': 'Development',  # Activity
         'Microsoft.VSTS.Scheduling.RemainingWork': '',  # Remaining Work
     }
@@ -135,6 +142,7 @@ def get_tasks(user_credentials, pbi_type):
         tasks.append(available_tasks["ReviewTests"])
         tasks.append(available_tasks["HighLevelDesign"])
         tasks.append(available_tasks["ReleasePlan"])
+        tasks.append(available_tasks["Requirement"])
 
     if pbi_type == "CleanupTasks":
         tasks.append(available_tasks["RemoveToggleCode"])
@@ -180,7 +188,7 @@ def __get_next_iteration(original_pbi_data):
     return next_iteration_path
 
 
-def get_cleanup_pbi(tfs_instance, original_pbi_id):
+def get_cleanup_pbi(tfs_instance, original_pbi_id, title_type):
     """
     The function returns
     :param tfs_instance:
@@ -213,27 +221,38 @@ def get_cleanup_pbi(tfs_instance, original_pbi_id):
     # Only if type is "Product Backglog Item"
     if original_pbi_fields["System.WorkItemType"] == "Product Backlog Item":
 
-        # Determine the cleanup item title
-        # has feature: {Feature name} + ': Cleanup'
-        # No feature: {PBI name} + ' - Cleanup'
-        if cleanup_pbi["parent_id"] is not None:
-            try:
-                feature_data = tfs_instance.connection.get_workitem(cleanup_pbi["parent_id"])
-                cleanup_pbi_title = feature_data["System.Title"] + ": Cleanup"
-            except:
+        """
+            # Determine the cleanup item title
+            # has feature: {Feature name} + ': Cleanup'
+            # No feature: {PBI name} + ' - Cleanup'
+            if cleanup_pbi["parent_id"] is not None:
+                try:
+                    feature_data = tfs_instance.connection.get_workitem(cleanup_pbi["parent_id"])
+                    cleanup_pbi_title = feature_data["System.Title"] + ": Cleanup"
+                except:
+                    cleanup_pbi_title = original_pbi_fields["System.Title"] + " - Cleanup"
+                    pass
+            else:
                 cleanup_pbi_title = original_pbi_fields["System.Title"] + " - Cleanup"
-                pass
-        else:
+            cleanup_pbi["data"]["System.Title"] = cleanup_pbi_title
+        """
+
+        # Set the item title
+        if title_type == "CreateCleanupFromPBI":
             cleanup_pbi_title = original_pbi_fields["System.Title"] + " - Cleanup"
+        elif title_type == "CreateCleanupFromFeature":
+            feature_data = tfs_instance.connection.get_workitem(cleanup_pbi["parent_id"])
+            cleanup_pbi_title = feature_data["System.Title"] + ": Cleanup"
+
         cleanup_pbi["data"]["System.Title"] = cleanup_pbi_title
 
         # Static fields
         cleanup_pbi["data"]["System.State"] = "Approved"
         cleanup_pbi["data"]["Microsoft.VSTS.Common.BusinessValue"] = "3001"
         cleanup_pbi["data"]["Microsoft.VSTS.Scheduling.Effort"] = "0"
-        cleanup_pbi["data"]["System.Description"] = "Cleanup PBI"
-        cleanup_pbi["data"]["NetBet.ProductPreparationState"] = "Not Started"
-        cleanup_pbi["data"]["NetBet.TechnicalPreparationState"] = "Not Started"
+        cleanup_pbi["data"]["System.Description"] = "Cleanup PBI for PBI " + str(original_pbi_id)
+        cleanup_pbi["data"]["NetBet.ProductPreparationState"] = "In Progress"
+        cleanup_pbi["data"]["NetBet.TechnicalPreparationState"] = "Not Required"
         cleanup_pbi["data"]["System.IterationPath"] = __get_next_iteration(original_pbi_data)
 
         # Fields that should be as the original PBI (if they have any value)

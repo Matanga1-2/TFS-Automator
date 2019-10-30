@@ -37,7 +37,7 @@ def copy_task(tfs_instance, original_task_data, target_pbi_data):
             return
 
 
-def copy_pbi_to_cleanup(tfs_instance, user_credentials):
+def copy_pbi_to_cleanup(tfs_instance, user_credentials, title_type):
     """
     Function to duplicate a PBI in the same feature if available
     :param tfs_instance: the TFS connection
@@ -46,6 +46,55 @@ def copy_pbi_to_cleanup(tfs_instance, user_credentials):
     """
 
     # Get the original PBI ID
+    print("Please enter the original PBI ID")
+    original_pbi_id = getObjects.get_item_id()
+
+    # Get the cleanup PBI tasks
+    try:
+        cleanup_pbi = getObjects.get_cleanup_pbi(tfs_instance, original_pbi_id, title_type)
+    except getObjects.WorkitemDoesntMatchIDError:
+        print("Workitem ID doesn't match a PBI")
+        return
+
+    # Add the cleanup PBI
+    try:
+        new_pbi = tfs_instance.add_workitem(item_fields=cleanup_pbi["data"], parent_item_id=cleanup_pbi["parent_id"],
+                                            workitem_type="PBI")
+        print("PBI " + str(new_pbi) + " was created successfully")
+        new_pbi_data = tfs_instance.connection.get_workitem(new_pbi)
+    except requests.exceptions.HTTPError as error:
+        print("Oops.. there was an HTTP error: {0}".format(error))
+        return
+
+    # Add the related relation
+    try:
+        relation_url = """https://tfs2018.net-bet.net/tfs/DefaultCollection/154f45b9-7e72-44b9-bd28-225c488dfde2/
+            _apis/wit/workItems/"""
+        relations = ([])
+        relations.append({'rel': 'System.LinkTypes.Related', 'url': relation_url + str(original_pbi_id)})
+        relations.append({'rel': 'System.LinkTypes.Dependency-Reverse', 'url': relation_url + str(original_pbi_id)})
+        new_pbi_data.add_relations_raw(relations)
+    except:
+        pass
+
+    # Add cleanup tasks to the new PBI
+    try:
+        add_tasks_to_pbi(tfs_instance, user_credentials, pbi_type="CleanupTasks", pbi_id=new_pbi)
+    except requests.exceptions.HTTPError as error:
+        print("Oops.. there was an HTTP error: {0}".format(error))
+        return
+
+
+def create_cleanup_pbi_to_feature(tfs_instance, user_credentials):
+    """
+    Function to create a cleanup PBI to a feature
+    :param tfs_instance: the TFS connection
+    :param user_credentials: the credentials
+    :kwargs expected a dictionary with the feature ID
+    :return: the new PBI ID
+    """
+
+    # Get the feature PBI ID
     print("Please enter the original PBI ID")
     original_pbi_id = getObjects.get_item_id()
 

@@ -109,8 +109,9 @@ def main():
                                          pbi_type=selected_operation.name)
         elif selected_operation.name == "CloneTasks":
             manageTasks.clone_pbi_tasks(tfs_instance)
-        elif selected_operation.name == "CreateCleanup":
-            manageTasks.copy_pbi_to_cleanup(tfs_instance, user_credentials)
+        elif selected_operation.name == "CreateCleanupFromPBI"\
+                or selected_operation.name == "CreateCleanupFromFeature":
+            manageTasks.copy_pbi_to_cleanup(tfs_instance, user_credentials, title_type=selected_operation.name)
         elif selected_operation.name == "RemovePBITasks":
             manageTasks.remove_pbi_with_tasks(tfs_instance, user_credentials)
         elif selected_operation.name == "RemoveTask":
