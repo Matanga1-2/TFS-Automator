@@ -177,6 +177,7 @@ def __get_next_iteration(original_pbi_data):
     :return: A string of the next iteration path
     """
 
+    """
     iteration_path = original_pbi_data["System.IterationPath"]
     iteration_number = re.search(r'\s+\d+', iteration_path)
     if iteration_number:
@@ -186,6 +187,8 @@ def __get_next_iteration(original_pbi_data):
     else:
         next_iteration_path = iteration_path
     return next_iteration_path
+    """
+    return original_pbi_data["System.IterationPath"]
 
 
 def get_cleanup_pbi(tfs_instance, original_pbi_id, title_type):
