@@ -6,12 +6,20 @@ from os import path
 from os import remove
 from os import environ
 from os import mkdir
+import getpass
+import sys
 
 
 class CredentialsError(Exception):
     """
     An error indicating there was a problem with the user credentials
     """
+
+
+class CredentialsPath:
+    desktop = path.join(path.join(environ['USERPROFILE']), 'Desktop')
+    credentials_folder = desktop + "\\TFS"
+    credentials_file = credentials_folder + "\\config.txt"
 
 
 def get_credentials():
@@ -24,15 +32,11 @@ def get_credentials():
     # Check the connection credentials, if they do not exist get and save them
     credentials = {}
 
-    desktop = path.join(path.join(environ['USERPROFILE']), 'Desktop')
-    credentials_folder = desktop + "\\TFS"
-    credentials_file = credentials_folder + "\\config.txt"
+    if not path.isdir(CredentialsPath.credentials_folder):
+        mkdir(CredentialsPath.credentials_folder)
 
-    if not path.isdir(credentials_folder):
-        mkdir(credentials_folder)
-
-    if path.exists(credentials_file):
-        cred_file = open(credentials_file, "r")
+    if path.exists(CredentialsPath.credentials_file):
+        cred_file = open(CredentialsPath.credentials_file, "r")
         try:
             if cred_file.mode == 'r':
                 credentials_input = cred_file.readlines()
@@ -48,26 +52,40 @@ def get_credentials():
                 raise CredentialsError
         except IndexError:
             cred_file.close()
-            remove(credentials_file)
+            remove(CredentialsPath.credentials_file)
             print("There was a problem reading your credentials. Please try again...")
             raise CredentialsError
     else:
         print("It looks like this is your first time...")
-        credentials['userName'] = input("What is your TFS username? ")
-        credentials['password'] = input("What is your TFS password? ")
-        first_name = input("What is your first name? ")
-        last_name = input("What is your last name? ")
-        credentials['name'] = "{0} {1}<NET-BET\\{0}{2}>".format(first_name, last_name,
-                                                                last_name[0])
-        credentials['uri'] = "https://tfs2018.net-bet.net/tfs/DefaultCollection/"
-        credentials['project'] = "theLotter"
+        credentials = add_new_credentials()
+    return credentials
 
-        # Save credentials in config file
-        cred_file = open(credentials_file, "w+")
-        cred_file.write(credentials['userName'] + "\n")
-        cred_file.write(credentials['password'] + "\n")
-        cred_file.write(credentials['uri'] + "\n")
-        cred_file.write(credentials['project'] + "\n")
-        cred_file.write(credentials['name'] + "\n")
-        cred_file.close()
+
+def add_new_credentials():
+    """
+    The function prompts the user to enter new credentials.
+    Once finished, it returns the new credentials.
+    :return: credentials dictionary
+    """
+    credentials = {}
+
+    # Get new credentials
+    credentials['userName'] = input("What is your TFS username (email)? ")
+    credentials['password'] = getpass.getpass(prompt="What is your TFS password? ")
+    first_name = input("What is your first name? ")
+    last_name = input("What is your last name? ")
+    credentials['name'] = "{0} {1}<NET-BET\\{0}{2}>".format(first_name, last_name, last_name[0])
+    credentials['uri'] = "https://tfs2018.net-bet.net/tfs/DefaultCollection/"
+    credentials['project'] = "theLotter"
+
+    # Save credentials in config file
+    if not path.isdir(CredentialsPath.credentials_folder):
+        mkdir(CredentialsPath.credentials_folder)
+    cred_file = open(CredentialsPath.credentials_file, "w+")
+    cred_file.write(credentials['userName'] + "\n")
+    cred_file.write(credentials['password'] + "\n")
+    cred_file.write(credentials['uri'] + "\n")
+    cred_file.write(credentials['project'] + "\n")
+    cred_file.write(credentials['name'] + "\n")
+    cred_file.close()
     return credentials

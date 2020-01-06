@@ -18,9 +18,10 @@ def continue_program():
     The function checks if the user wants to end the program
     :return: True/False
     """
-    print()
-    user_response = input("Enter any character and press enter to handle another PBI: ")
-    return bool(user_response != "")
+    print("Choose another operation or exit the program")
+    return True
+    # user_response = input("Enter any character and press enter to handle another PBI: ")
+    # return bool(user_response != "")
 
 
 def get_operation(operations):
@@ -92,10 +93,7 @@ def main():
 
         if tfs_instance == "":
             # Initialize a new TFS connection
-            tfs_instance = tfs.TFSConnection(user_credentials['uri'],
-                                             user_credentials['project'],
-                                             user_credentials['userName'],
-                                             user_credentials['password'])
+            tfs_instance = initialize_tfs_instance(user_credentials)
 
         operations = manageOperations.Operations()
         selected_operation = get_operation(operations)
@@ -116,6 +114,11 @@ def main():
             manageTasks.remove_pbi_with_tasks(tfs_instance, user_credentials)
         elif selected_operation.name == "RemoveTask":
             manageTasks.remove_task_from_pbi(tfs_instance, user_credentials)
+        elif selected_operation.name == "UpdateCredentials":
+            handle_credentials.add_new_credentials()
+            tfs_instance = initialize_tfs_instance(user_credentials)
+        elif selected_operation.name == "EndProgram":
+            os.kill(os.getpid(), signal.SIGTERM)
 
         # check if need to continue
         if continue_program():
@@ -126,6 +129,14 @@ def main():
             watch_dog.refresh()
             continue
     os.kill(os.getpid(), signal.SIGTERM)
+
+
+def initialize_tfs_instance(credentials):
+    tfs_instance = tfs.TFSConnection(credentials['uri'],
+                                     credentials['project'],
+                                     credentials['userName'],
+                                     credentials['password'])
+    return tfs_instance
 
 
 if __name__ == "__main__":

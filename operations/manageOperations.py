@@ -53,5 +53,7 @@ def initiate_operations():
     operations_list.append(OperationType(8, "CreateCleanupFromFeature", "Create a cleanup PBI for a Feature"))
     operations_list.append(OperationType(9, "RemoveTask", "Remove a task"))
     operations_list.append(OperationType(10, "RemovePBITasks", "Remove a PBI and its tasks"))
+    operations_list.append(OperationType(11, "UpdateCredentials", "Update your TFS credentials"))
+    operations_list.append(OperationType(12, "EndProgram", "Exit"))
 
     return operations_list
