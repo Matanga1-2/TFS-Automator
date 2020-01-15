@@ -8,7 +8,7 @@ import signal
 from time import sleep
 from tfs_connect import tfs
 from credentials import handle_credentials
-from operations import manageTasks
+from operations import manage_tasks
 from operations import manageOperations
 from watchdog import watchdog
 
@@ -78,18 +78,18 @@ def activate_operation(selected_operation, tfs_instance, user_credentials):
             or selected_operation.name == "GoingLiveTasks" \
             or selected_operation.name == "E2ETasks" \
             or selected_operation.name == "ExploratoryTasks":
-        manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials,
-                                     pbi_type=selected_operation.name)
+        manage_tasks.add_tasks_to_pbi(tfs_instance, user_credentials,
+                                      pbi_type=selected_operation.name)
     elif selected_operation.name == "CloneTasks":
-        manageTasks.clone_pbi_tasks(tfs_instance)
+        manage_tasks.clone_pbi_tasks(tfs_instance)
     elif selected_operation.name == "CreateCleanupFromPBI" \
             or selected_operation.name == "CreateCleanupFromFeature":
-        manageTasks.copy_pbi_to_cleanup(tfs_instance, user_credentials,
-                                        title_type=selected_operation.name)
+        manage_tasks.copy_pbi_to_cleanup(tfs_instance, user_credentials,
+                                         title_type=selected_operation.name)
     elif selected_operation.name == "RemovePBITasks":
-        manageTasks.remove_pbi_with_tasks(tfs_instance, user_credentials)
+        manage_tasks.remove_pbi_with_tasks(tfs_instance, user_credentials)
     elif selected_operation.name == "RemoveTask":
-        manageTasks.remove_task_from_pbi(tfs_instance, user_credentials)
+        manage_tasks.remove_task_from_pbi(tfs_instance, user_credentials)
     elif selected_operation.name == "UpdateCredentials":
         handle_credentials.add_new_credentials()
         tfs_instance = initialize_tfs_instance(user_credentials)

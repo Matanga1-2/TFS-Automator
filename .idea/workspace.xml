@@ -2,15 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7392129f-4a83-4b67-a8bd-54c8024681c0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/TFS-Access.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/credentials/handle_credentials.py" beforeDir="false" afterPath="$PROJECT_DIR$/credentials/handle_credentials.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/operations/getObjects.py" beforeDir="false" afterPath="$PROJECT_DIR$/operations/get_objects.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/operations/manageTasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/operations/manageTasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/operations/get_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/operations/get_objects.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/operations/manageTasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/operations/manage_tasks.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tfs_access.py" beforeDir="false" afterPath="$PROJECT_DIR$/tfs_access.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -412,7 +407,14 @@
       <option name="project" value="LOCAL" />
       <updated>1578295028059</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="- Cleanup PBI is created for the same iteration">
+      <created>1579074603073</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1579074603073</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -502,14 +504,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/operations/manageTasks.py</url>
-          <line>110</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/operations/get_objects.py</url>
-          <line>245</line>
-          <option name="timeStamp" value="7" />
+          <line>241</line>
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

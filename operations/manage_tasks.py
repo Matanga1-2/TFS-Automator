@@ -1,5 +1,9 @@
-from operations import get_objects
+"""
+The module is in charge of performing the tfs requested operations
+"""
+
 import requests.exceptions
+from operations import get_objects
 
 
 def copy_task(tfs_instance, original_task_data, target_pbi_data):
@@ -22,16 +26,23 @@ def copy_task(tfs_instance, original_task_data, target_pbi_data):
             target_task["System.AreaId"] = target_pbi_data["System.AreaId"]
             target_task["System.IterationId"] = target_pbi_data["System.IterationId"]
             target_task["System.Title"] = original_task["System.Title"]
-            target_task["Microsoft.VSTS.Common.BacklogPriority"] = original_task["Microsoft.VSTS.Common.BacklogPriority"]
-            target_task["Microsoft.VSTS.Common.Activity"] = original_task["Microsoft.VSTS.Common.Activity"]
+            target_task["Microsoft.VSTS.Common.BacklogPriority"] = \
+                original_task["Microsoft.VSTS.Common.BacklogPriority"]
+            target_task["Microsoft.VSTS.Common.Activity"] = \
+                original_task["Microsoft.VSTS.Common.Activity"]
             target_task["System.Description"] = original_task["System.Description"]
         except:
             pass
 
         # Add a new task to the target PBI with the source task fields
         try:
-            new_task = tfs_instance.add_workitem(target_task, target_pbi_data.id, workitem_type="Task")
-            print("Task " + str(new_task) + " was copied to PBI " + str(target_pbi_data.id) + " successfully")
+            new_task = tfs_instance.add_workitem(target_task,
+                                                 target_pbi_data.id, workitem_type="Task")
+            print("Task " +
+                  str(new_task) +
+                  " was copied to PBI " +
+                  str(target_pbi_data.id) +
+                  " successfully")
         except requests.exceptions.HTTPError as error:
             print("Oops.. there was an HTTP error: {0}".format(error))
             return
@@ -42,6 +53,7 @@ def copy_pbi_to_cleanup(tfs_instance, user_credentials, title_type):
     Function to duplicate a PBI in the same feature if available
     :param tfs_instance: the TFS connection
     :param user_credentials: the credentials
+    :param title_type: which title should be
     :return: the new PBI ID
     """
 
@@ -51,14 +63,17 @@ def copy_pbi_to_cleanup(tfs_instance, user_credentials, title_type):
 
     # Get the cleanup PBI tasks
     try:
-        cleanup_pbi = get_objects.get_cleanup_pbi(tfs_instance, original_pbi_id, title_type)
+        cleanup_pbi = get_objects.get_cleanup_pbi(tfs_instance,
+                                                  original_pbi_id,
+                                                  title_type)
     except get_objects.WorkitemDoesntMatchIDError:
         print("Workitem ID doesn't match a PBI")
         return
 
     # Add the cleanup PBI
     try:
-        new_pbi = tfs_instance.add_workitem(item_fields=cleanup_pbi["data"], parent_item_id=cleanup_pbi["parent_id"],
+        new_pbi = tfs_instance.add_workitem(item_fields=cleanup_pbi["data"],
+                                            parent_item_id=cleanup_pbi["parent_id"],
                                             workitem_type="PBI")
         print("PBI " + str(new_pbi) + " was created successfully")
         new_pbi_data = tfs_instance.connection.get_workitem(new_pbi)
@@ -67,19 +82,23 @@ def copy_pbi_to_cleanup(tfs_instance, user_credentials, title_type):
         return
 
     # Add the related relation
+    relation_url = 'https://tfs2018.net-bet.net/tfs/DefaultCollection/' \
+                   '154f45b9-7e72-44b9-bd28-225c488dfde2/' \
+                   '_apis/wit/workItems/'
+    relations = ([])
     try:
-        relation_url = """https://tfs2018.net-bet.net/tfs/DefaultCollection/154f45b9-7e72-44b9-bd28-225c488dfde2/
-            _apis/wit/workItems/"""
-        relations = ([])
-        relations.append({'rel': 'System.LinkTypes.Related', 'url': relation_url + str(original_pbi_id)})
-        relations.append({'rel': 'System.LinkTypes.Dependency-Reverse', 'url': relation_url + str(original_pbi_id)})
+        relations.append({'rel': 'System.LinkTypes.Related',
+                          'url': relation_url + str(original_pbi_id)})
+        relations.append({'rel': 'System.LinkTypes.Dependency-Reverse',
+                          'url': relation_url + str(original_pbi_id)})
         new_pbi_data.add_relations_raw(relations)
     except:
         pass
 
     # Add cleanup tasks to the new PBI
     try:
-        add_tasks_to_pbi(tfs_instance, user_credentials, pbi_type="CleanupTasks", pbi_id=new_pbi)
+        add_tasks_to_pbi(tfs_instance, user_credentials,
+                         pbi_type="CleanupTasks", pbi_id=new_pbi)
     except requests.exceptions.HTTPError as error:
         print("Oops.. there was an HTTP error: {0}".format(error))
         return
@@ -107,7 +126,8 @@ def create_cleanup_pbi_to_feature(tfs_instance, user_credentials):
 
     # Add the cleanup PBI
     try:
-        new_pbi = tfs_instance.add_workitem(item_fields=cleanup_pbi["data"], parent_item_id=cleanup_pbi["parent_id"],
+        new_pbi = tfs_instance.add_workitem(item_fields=cleanup_pbi["data"],
+                                            parent_item_id=cleanup_pbi["parent_id"],
                                             workitem_type="PBI")
         print("PBI " + str(new_pbi) + " was created successfully")
         new_pbi_data = tfs_instance.connection.get_workitem(new_pbi)
@@ -116,19 +136,23 @@ def create_cleanup_pbi_to_feature(tfs_instance, user_credentials):
         return
 
     # Add the related relation
+    relation_url = 'https://tfs2018.net-bet.net/tfs/DefaultCollection/' \
+                   '154f45b9-7e72-44b9-bd28-225c488dfde2/' \
+                   '_apis/wit/workItems/'
+    relations = ([])
     try:
-        relation_url = """https://tfs2018.net-bet.net/tfs/DefaultCollection/154f45b9-7e72-44b9-bd28-225c488dfde2/
-            _apis/wit/workItems/"""
-        relations = ([])
-        relations.append({'rel': 'System.LinkTypes.Related', 'url': relation_url + str(original_pbi_id)})
-        relations.append({'rel': 'System.LinkTypes.Dependency-Reverse', 'url': relation_url + str(original_pbi_id)})
+        relations.append({'rel': 'System.LinkTypes.Related',
+                          'url': relation_url + str(original_pbi_id)})
+        relations.append({'rel': 'System.LinkTypes.Dependency-Reverse',
+                          'url': relation_url + str(original_pbi_id)})
         new_pbi_data.add_relations_raw(relations)
     except:
         pass
 
     # Add cleanup tasks to the new PBI
     try:
-        add_tasks_to_pbi(tfs_instance, user_credentials, pbi_type="CleanupTasks", pbi_id=new_pbi)
+        add_tasks_to_pbi(tfs_instance, user_credentials,
+                         pbi_type="CleanupTasks", pbi_id=new_pbi)
     except requests.exceptions.HTTPError as error:
         print("Oops.. there was an HTTP error: {0}".format(error))
         return
@@ -145,7 +169,9 @@ def add_task_to_pbi(tfs_instance, task, pbi_data):
     task['System.AreaId'] = pbi_data['System.AreaId']  # Area Path
     task['System.IterationId'] = pbi_data['System.IterationId']  # Iteration Path
     try:
-        new_task = tfs_instance.add_workitem(task, pbi_data.id, workitem_type="Task")  # Add a new task
+        new_task = tfs_instance.add_workitem(task,
+                                             pbi_data.id,
+                                             workitem_type="Task")  # Add a new task
     except requests.exceptions.HTTPError as error:
         print("Oops.. there was an HTTP error: {0}".format(error))
         return

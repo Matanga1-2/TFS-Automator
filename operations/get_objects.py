@@ -187,7 +187,29 @@ def __get_next_iteration(original_pbi_data):
     return original_pbi_data["System.IterationPath"]
 
 
-def get_cleanup_pbi(tfs_instance, original_pbi_id, title_type):
+def __get_cleanup_title(tfs_instance, original_pbi_fields, parent_id, title_type):
+    """
+    The method returns the expected cleanup title
+    :param tfs_instance:   TFS instance PBI
+    :param original_pbi_fields: Original PBI fields
+    :param cleanup_pbi:         Object of the cleanup PBI
+    :param title_type:
+    :return:
+    """
+    if title_type == "CreateCleanupFromPBI":
+        cleanup_pbi_title = original_pbi_fields["System.Title"] + " - Cleanup"
+    elif title_type == "CreateCleanupFromFeature":
+        if parent_id is not None:
+            feature_data = tfs_instance.connection.get_workitem(parent_id)
+            cleanup_pbi_title = feature_data["System.Title"] + ": Cleanup"
+        else:
+            cleanup_pbi_title = original_pbi_fields["System.Title"] + " - Cleanup"
+    elif title_type is None:
+        cleanup_pbi_title = ''
+    return cleanup_pbi_title
+
+
+def get_cleanup_pbi(tfs_instance, original_pbi_id, title_type=None):
     """
     The function returns
     :param tfs_instance:The tfs instance
@@ -213,19 +235,14 @@ def get_cleanup_pbi(tfs_instance, original_pbi_id, title_type):
     original_pbi_fields = original_pbi_data.fields
 
     # Only if type is "Product Backlog Item"
+
     if original_pbi_fields["System.WorkItemType"] == "Product Backlog Item":
         # Set the item title
-        if title_type == "CreateCleanupFromPBI":
-            cleanup_pbi_title = original_pbi_fields["System.Title"] + " - Cleanup"
-        elif title_type == "CreateCleanupFromFeature":
-            cleanup_pbi["parent_id"] = original_pbi_data.parent_id
-            if cleanup_pbi["parent_id"] is not None:
-                feature_data = tfs_instance.connection.get_workitem(cleanup_pbi["parent_id"])
-                cleanup_pbi_title = feature_data["System.Title"] + ": Cleanup"
-            else:
-                cleanup_pbi_title = original_pbi_fields["System.Title"] + " - Cleanup"
-
-        cleanup_pbi["data"]["System.Title"] = cleanup_pbi_title
+        cleanup_pbi["parent_id"] = original_pbi_data.parent_id
+        cleanup_pbi["data"]["System.Title"] = __get_cleanup_title(tfs_instance,
+                                                                  original_pbi_fields,
+                                                                  cleanup_pbi["parent_id"],
+                                                                  title_type)
 
         # Static fields
         cleanup_pbi["data"]["System.State"] = "Approved"
