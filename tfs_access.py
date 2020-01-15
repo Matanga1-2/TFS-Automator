@@ -65,6 +65,38 @@ def print_welcome_message():
     print(r"                                                                                    ")
 
 
+def activate_operation(selected_operation, tfs_instance, user_credentials):
+    """
+    The function activated an operation based on "selected operation"
+    :param selected_operation: an object of operation
+    :param tfs_instance: the tfs instance
+    :param user_credentials: the credentials
+    :return:
+    """
+    if selected_operation.name == "RegularTasks" \
+            or selected_operation.name == "CleanupTasks" \
+            or selected_operation.name == "GoingLiveTasks" \
+            or selected_operation.name == "E2ETasks" \
+            or selected_operation.name == "ExploratoryTasks":
+        manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials,
+                                     pbi_type=selected_operation.name)
+    elif selected_operation.name == "CloneTasks":
+        manageTasks.clone_pbi_tasks(tfs_instance)
+    elif selected_operation.name == "CreateCleanupFromPBI" \
+            or selected_operation.name == "CreateCleanupFromFeature":
+        manageTasks.copy_pbi_to_cleanup(tfs_instance, user_credentials,
+                                        title_type=selected_operation.name)
+    elif selected_operation.name == "RemovePBITasks":
+        manageTasks.remove_pbi_with_tasks(tfs_instance, user_credentials)
+    elif selected_operation.name == "RemoveTask":
+        manageTasks.remove_task_from_pbi(tfs_instance, user_credentials)
+    elif selected_operation.name == "UpdateCredentials":
+        handle_credentials.add_new_credentials()
+        tfs_instance = initialize_tfs_instance(user_credentials)
+    elif selected_operation.name == "EndProgram":
+        os.kill(os.getpid(), signal.SIGTERM)
+
+
 def main():
     """
     The main program function
@@ -98,27 +130,8 @@ def main():
         operations = manageOperations.Operations()
         selected_operation = get_operation(operations)
         watch_dog.refresh()
-        if selected_operation.name == "RegularTasks" \
-                or selected_operation.name == "CleanupTasks"\
-                or selected_operation.name == "GoingLiveTasks"\
-                or selected_operation.name == "E2ETasks"\
-                or selected_operation.name == "ExploratoryTasks":
-            manageTasks.add_tasks_to_pbi(tfs_instance, user_credentials,
-                                         pbi_type=selected_operation.name)
-        elif selected_operation.name == "CloneTasks":
-            manageTasks.clone_pbi_tasks(tfs_instance)
-        elif selected_operation.name == "CreateCleanupFromPBI"\
-                or selected_operation.name == "CreateCleanupFromFeature":
-            manageTasks.copy_pbi_to_cleanup(tfs_instance, user_credentials, title_type=selected_operation.name)
-        elif selected_operation.name == "RemovePBITasks":
-            manageTasks.remove_pbi_with_tasks(tfs_instance, user_credentials)
-        elif selected_operation.name == "RemoveTask":
-            manageTasks.remove_task_from_pbi(tfs_instance, user_credentials)
-        elif selected_operation.name == "UpdateCredentials":
-            handle_credentials.add_new_credentials()
-            tfs_instance = initialize_tfs_instance(user_credentials)
-        elif selected_operation.name == "EndProgram":
-            os.kill(os.getpid(), signal.SIGTERM)
+
+        activate_operation(selected_operation, tfs_instance, user_credentials)
 
         # check if need to continue
         if continue_program():
@@ -132,6 +145,11 @@ def main():
 
 
 def initialize_tfs_instance(credentials):
+    """
+    Opens an active connection to TFS
+    :param credentials: a set of credentials
+    :return: An active TFS instance
+    """
     tfs_instance = tfs.TFSConnection(credentials['uri'],
                                      credentials['project'],
                                      credentials['userName'],

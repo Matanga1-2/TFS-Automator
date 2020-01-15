@@ -7,19 +7,16 @@ from os import remove
 from os import environ
 from os import mkdir
 import getpass
-import sys
+
+CREDENTIALS_PATH = {'desktop': path.join(path.join(environ['USERPROFILE']), 'Desktop')}
+CREDENTIALS_PATH['folder'] = CREDENTIALS_PATH['desktop'] + "\\TFS"
+CREDENTIALS_PATH['file'] = CREDENTIALS_PATH['folder'] + "\\config.txt"
 
 
 class CredentialsError(Exception):
     """
     An error indicating there was a problem with the user credentials
     """
-
-
-class CredentialsPath:
-    desktop = path.join(path.join(environ['USERPROFILE']), 'Desktop')
-    credentials_folder = desktop + "\\TFS"
-    credentials_file = credentials_folder + "\\config.txt"
 
 
 def get_credentials():
@@ -32,11 +29,11 @@ def get_credentials():
     # Check the connection credentials, if they do not exist get and save them
     credentials = {}
 
-    if not path.isdir(CredentialsPath.credentials_folder):
-        mkdir(CredentialsPath.credentials_folder)
+    if not path.isdir(CREDENTIALS_PATH['folder']):
+        mkdir(CREDENTIALS_PATH['folder'])
 
-    if path.exists(CredentialsPath.credentials_file):
-        cred_file = open(CredentialsPath.credentials_file, "r")
+    if path.exists(CREDENTIALS_PATH['file']):
+        cred_file = open(CREDENTIALS_PATH['file'], "r")
         try:
             if cred_file.mode == 'r':
                 credentials_input = cred_file.readlines()
@@ -52,7 +49,7 @@ def get_credentials():
                 raise CredentialsError
         except IndexError:
             cred_file.close()
-            remove(CredentialsPath.credentials_file)
+            remove(CREDENTIALS_PATH['file'])
             print("There was a problem reading your credentials. Please try again...")
             raise CredentialsError
     else:
@@ -79,9 +76,9 @@ def add_new_credentials():
     credentials['project'] = "theLotter"
 
     # Save credentials in config file
-    if not path.isdir(CredentialsPath.credentials_folder):
-        mkdir(CredentialsPath.credentials_folder)
-    cred_file = open(CredentialsPath.credentials_file, "w+")
+    if not path.isdir(CREDENTIALS_PATH['folder']):
+        mkdir(CREDENTIALS_PATH['folder'])
+    cred_file = open(CREDENTIALS_PATH['file'], "w+")
     cred_file.write(credentials['userName'] + "\n")
     cred_file.write(credentials['password'] + "\n")
     cred_file.write(credentials['uri'] + "\n")

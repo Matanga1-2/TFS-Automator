@@ -1,4 +1,4 @@
-from operations import getObjects
+from operations import get_objects
 import requests.exceptions
 
 
@@ -47,12 +47,12 @@ def copy_pbi_to_cleanup(tfs_instance, user_credentials, title_type):
 
     # Get the original PBI ID
     print("Please enter the original PBI ID")
-    original_pbi_id = getObjects.get_item_id()
+    original_pbi_id = get_objects.get_item_id()
 
     # Get the cleanup PBI tasks
     try:
-        cleanup_pbi = getObjects.get_cleanup_pbi(tfs_instance, original_pbi_id, title_type)
-    except getObjects.WorkitemDoesntMatchIDError:
+        cleanup_pbi = get_objects.get_cleanup_pbi(tfs_instance, original_pbi_id, title_type)
+    except get_objects.WorkitemDoesntMatchIDError:
         print("Workitem ID doesn't match a PBI")
         return
 
@@ -96,12 +96,12 @@ def create_cleanup_pbi_to_feature(tfs_instance, user_credentials):
 
     # Get the feature PBI ID
     print("Please enter the original PBI ID")
-    original_pbi_id = getObjects.get_item_id()
+    original_pbi_id = get_objects.get_item_id()
 
     # Get the cleanup PBI tasks
     try:
-        cleanup_pbi = getObjects.get_cleanup_pbi(tfs_instance, original_pbi_id)
-    except getObjects.WorkitemDoesntMatchIDError:
+        cleanup_pbi = get_objects.get_cleanup_pbi(tfs_instance, original_pbi_id)
+    except get_objects.WorkitemDoesntMatchIDError:
         print("Workitem ID doesn't match a PBI")
         return
 
@@ -164,7 +164,7 @@ def add_tasks_to_pbi(tfs_instance, user_credentials, pbi_id=None, pbi_type="regu
 
     # Ask for PBI ID
     if pbi_id is None:
-        pbi_id = getObjects.get_item_id()
+        pbi_id = get_objects.get_item_id()
 
     # Get the PBI data
     try:
@@ -176,7 +176,7 @@ def add_tasks_to_pbi(tfs_instance, user_credentials, pbi_id=None, pbi_type="regu
         return
 
     # Get tasks to add
-    tasks = getObjects.get_tasks(user_credentials, pbi_type=pbi_type)
+    tasks = get_objects.get_tasks(user_credentials, pbi_type=pbi_type)
 
     # Add tasks
     for task in tasks:
@@ -192,7 +192,7 @@ def clone_pbi_tasks(tfs_instance):
 
     # Ask for the first PBI ID
     print("You need to specify the source PBI ID")
-    source_pbi_id = getObjects.get_item_id()
+    source_pbi_id = get_objects.get_item_id()
 
     # Get the first PBI data
     try:
@@ -205,7 +205,7 @@ def clone_pbi_tasks(tfs_instance):
 
     # Ask for the second PBI ID
     print("You need to specify the target PBI ID")
-    target_pbi_id = getObjects.get_item_id()
+    target_pbi_id = get_objects.get_item_id()
 
     # Get the second PBI data
     try:
@@ -232,7 +232,7 @@ def remove_pbi_with_tasks(tfs_instance, user_credentials):
     """
 
     # Ask for the PBI ID
-    pbi_id = getObjects.get_item_id()
+    pbi_id = get_objects.get_item_id()
 
     # Get the PBI data
     try:
@@ -255,7 +255,7 @@ def remove_pbi_with_tasks(tfs_instance, user_credentials):
             return
 
     # Remove the PBI
-    update_data = getObjects.get_removed_task_data(user_credentials)
+    update_data = get_objects.get_removed_task_data(user_credentials)
     try:
         tfs_instance.connection.update_workitem(pbi_id, update_data)
         print('PBI {0} was removed successfully'.format(pbi_id))
@@ -279,7 +279,7 @@ def remove_task(tfs_instance, user_credentials, task_id):
     task_data = tfs_instance.connection.get_workitem(task_id)
     relations = task_data.data.get('relations')
     for rel in range(len(relations)):
-        update_data = getObjects.get_removed_task_data(user_credentials, rel_count=1)
+        update_data = get_objects.get_removed_task_data(user_credentials, rel_count=1)
         try:
             tfs_instance.connection.update_workitem(work_item_id=task_id, update_data=update_data)
             print('Task {0} was removed successfully'.format(task_id))
@@ -298,7 +298,7 @@ def remove_task_from_pbi(tfs_instance, user_credentials):
     :return: nothing
     """
     # Ask for the task ID
-    task_id = getObjects.get_item_id()
+    task_id = get_objects.get_item_id()
 
     # Remove the task
     try:
