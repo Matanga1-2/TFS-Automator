@@ -9,7 +9,7 @@ from time import sleep
 from tfs_connect import tfs
 from credentials import handle_credentials
 from operations import manage_tasks
-from operations import manageOperations
+from operations import manage_operations
 from watchdog import watchdog
 
 
@@ -20,8 +20,6 @@ def continue_program():
     """
     print("Choose another operation or exit the program")
     return True
-    # user_response = input("Enter any character and press enter to handle another PBI: ")
-    # return bool(user_response != "")
 
 
 def get_operation(operations):
@@ -92,7 +90,6 @@ def activate_operation(selected_operation, tfs_instance, user_credentials):
         manage_tasks.remove_task_from_pbi(tfs_instance, user_credentials)
     elif selected_operation.name == "UpdateCredentials":
         handle_credentials.add_new_credentials()
-        tfs_instance = initialize_tfs_instance(user_credentials)
     elif selected_operation.name == "EndProgram":
         os.kill(os.getpid(), signal.SIGTERM)
 
@@ -104,7 +101,7 @@ def main():
     # Initialize variables
     retry = True
     user_credentials = ""
-    tfs_instance = ""
+    operations = ""
     watch_dog = watchdog.Watchdog()
     watch_dog.start()
 
@@ -115,23 +112,23 @@ def main():
         print("What would you like to do?")
         print()
 
-        if user_credentials == "":
-            # Get credentials for the connection
-            try:
-                user_credentials = handle_credentials.get_credentials()
-                watch_dog.refresh()
-            except handle_credentials.CredentialsError:
-                continue
+        # Get credentials for the connection
+        try:
+            user_credentials = handle_credentials.get_credentials()
+            watch_dog.refresh()
+        except handle_credentials.CredentialsError:
+            continue
 
-        if tfs_instance == "":
-            # Initialize a new TFS connection
-            tfs_instance = initialize_tfs_instance(user_credentials)
+        # Get available operations
+        if operations == "":
+            operations = manage_operations.Operations()
 
-        operations = manageOperations.Operations()
-        selected_operation = get_operation(operations)
+        # Select the require operation
+        selected_operation_id = get_operation(operations)
         watch_dog.refresh()
 
-        activate_operation(selected_operation, tfs_instance, user_credentials)
+        with tfs.TFSConnection(user_credentials) as con:
+            activate_operation(selected_operation_id, con, user_credentials)
 
         # check if need to continue
         if continue_program():
@@ -142,19 +139,6 @@ def main():
             watch_dog.refresh()
             continue
     os.kill(os.getpid(), signal.SIGTERM)
-
-
-def initialize_tfs_instance(credentials):
-    """
-    Opens an active connection to TFS
-    :param credentials: a set of credentials
-    :return: An active TFS instance
-    """
-    tfs_instance = tfs.TFSConnection(credentials['uri'],
-                                     credentials['project'],
-                                     credentials['userName'],
-                                     credentials['password'])
-    return tfs_instance
 
 
 if __name__ == "__main__":

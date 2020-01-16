@@ -33,25 +33,19 @@ def get_credentials():
         mkdir(CREDENTIALS_PATH['folder'])
 
     if path.exists(CREDENTIALS_PATH['file']):
-        cred_file = open(CREDENTIALS_PATH['file'], "r")
-        try:
-            if cred_file.mode == 'r':
-                credentials_input = cred_file.readlines()
+        with open(CREDENTIALS_PATH['file'], "r") as file:
+            try:
+                credentials_input = file.readlines()
                 credentials['userName'] = credentials_input[0].rstrip()
                 credentials['password'] = credentials_input[1].rstrip()
                 credentials['uri'] = credentials_input[2].rstrip()
                 credentials['project'] = credentials_input[3].rstrip()
                 credentials['name'] = credentials_input[4].\
                     rstrip().replace(r'\\', r'\'').replace(r"'", "")
-                cred_file.close()
-            else:
-                print("There was an error getting the credentials. Please try again")
+            except IndexError:
+                remove(CREDENTIALS_PATH['file'])
+                print("There was a problem reading your credentials. Please try again...")
                 raise CredentialsError
-        except IndexError:
-            cred_file.close()
-            remove(CREDENTIALS_PATH['file'])
-            print("There was a problem reading your credentials. Please try again...")
-            raise CredentialsError
     else:
         print("It looks like this is your first time...")
         credentials = add_new_credentials()
@@ -78,11 +72,10 @@ def add_new_credentials():
     # Save credentials in config file
     if not path.isdir(CREDENTIALS_PATH['folder']):
         mkdir(CREDENTIALS_PATH['folder'])
-    cred_file = open(CREDENTIALS_PATH['file'], "w+")
-    cred_file.write(credentials['userName'] + "\n")
-    cred_file.write(credentials['password'] + "\n")
-    cred_file.write(credentials['uri'] + "\n")
-    cred_file.write(credentials['project'] + "\n")
-    cred_file.write(credentials['name'] + "\n")
-    cred_file.close()
+    with open(CREDENTIALS_PATH['file'], "w+") as file:
+        file.write(credentials['userName'] + "\n")
+        file.write(credentials['password'] + "\n")
+        file.write(credentials['uri'] + "\n")
+        file.write(credentials['project'] + "\n")
+        file.write(credentials['name'] + "\n")
     return credentials

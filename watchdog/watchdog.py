@@ -65,24 +65,21 @@ class Watchdog:
     def get_timeout(default=120):
         """
         Get the timout setup from config
-        :param default:
+        :param default: default watchdog config
         :return: timeout in seconds
         """
         file_path = "./watchdog_config.txt"
         while True:
             if os.path.exists(file_path):
-                config_file = open(file_path, "r")
-                try:
-                    timeout = config_file.readlines()[0]
-                    timeout = int(timeout)
-                    config_file.close()
-                    return timeout
-                except IndexError:
-                    config_file.close()
-                    os.remove(file_path)
-                    continue
+                with open(file_path, "r") as file:
+                    try:
+                        timeout = file.readlines()[0]
+                        timeout = int(timeout)
+                        return timeout
+                    except IndexError:
+                        os.remove(file_path)
+                        continue
             else:
-                config_file = open(file_path, "w+")
-                config_file.write(str(default))
-                config_file.close()
+                with open(file_path, "w+") as file:
+                    file.write(str(default))
                 return default

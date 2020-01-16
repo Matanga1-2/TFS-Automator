@@ -6,18 +6,24 @@ from requests_ntlm import HttpNtlmAuth
 from tfs import TFSAPI
 
 
-class TFSConnection(TFSAPI):
+class TFSConnection:
     """
     this class represents a TFS connection.
     Once initialized and connected properly, it can be used to retrieve/update data from TFS
     """
-    def __init__(self, tfs_uri, tfs_project, tfs_username, tfs_password):
-        self.uri = tfs_uri
-        self.username = tfs_username
-        self.password = tfs_password
-        self.project = tfs_project
+    def __init__(self, credentials):
+        self.uri = credentials['uri']
+        self.username = credentials['userName']
+        self.password = credentials['password']
+        self.project = credentials['project']
         self.connection = None
-        self.connect_to_tfs()
+
+    def __enter__(self):
+        self.connection = self.connect_to_tfs()
+        return self.connection
+
+    def __exit__(self, exception_type, exception_value, traceback):
+        self.connection = None
 
     def add_workitem(self, item_fields, parent_item_id=None, workitem_type="Task"):
         """
@@ -51,7 +57,7 @@ class TFSConnection(TFSAPI):
         Creates a TFS server connection and assign it to the object
         :return: None
         """
-        self.connection = TFSAPI(
+        return TFSAPI(
             self.uri, project=self.project,
-            user=self.username, password=self.password, auth_type=HttpNtlmAuth
+            user=self.username, password=self.password, auth_type=HttpNtlmAuth, connect_timeout=10
         )

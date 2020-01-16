@@ -16,6 +16,9 @@ class OperationType:
     def __str__(self):
         return "(" + str(self.ordinal_number) + ")  --  " + str(self.description)
 
+    def __eq__(self, other):
+        return self.ordinal_number == other
+
 
 class Operations:
     """
@@ -25,9 +28,15 @@ class Operations:
         self.operations_list = initiate_operations()
 
     def get_operations_list_ordered(self):
+        """
+        :return: Returns a list of Operation object ordered by ID
+        """
         return sorted(self.operations_list, key=lambda operation: operation.ordinal_number)
 
     def get_operation_by_ordinal_number(self, ordinal_number):
+        """
+        :return: A specific operation based on ID
+        """
         try:
             operation_number = int(ordinal_number)
         except ValueError:
@@ -42,6 +51,10 @@ class Operations:
 
 
 def initiate_operations():
+    """
+    Build a list of available operations
+    :return: Return the list
+    """
     operations_list = ([])
     operations_list.append(OperationType(1, "RegularTasks", "Add regular tasks to a PBI"))
     operations_list.append(OperationType(2, "CleanupTasks", "Add cleanup tasks to a PBI"))
@@ -49,8 +62,10 @@ def initiate_operations():
     operations_list.append(OperationType(4, "ExploratoryTasks", "Add exploratory tasks PBI"))
     operations_list.append(OperationType(5, "E2ETasks", "Add E2E tasks to a PBI"))
     operations_list.append(OperationType(6, "CloneTasks", "Clone tasks between PBIs"))
-    operations_list.append(OperationType(7, "CreateCleanupFromPBI", "Create a cleanup PBI from an existing PBI"))
-    operations_list.append(OperationType(8, "CreateCleanupFromFeature", "Create a cleanup PBI for a Feature"))
+    operations_list.append(OperationType(7, "CreateCleanupFromPBI",
+                                         "Create a cleanup PBI from an existing PBI"))
+    operations_list.append(OperationType(8, "CreateCleanupFromFeature",
+                                         "Create a cleanup PBI for a Feature"))
     operations_list.append(OperationType(9, "RemoveTask", "Remove a task"))
     operations_list.append(OperationType(10, "RemovePBITasks", "Remove a PBI and its tasks"))
     operations_list.append(OperationType(11, "UpdateCredentials", "Update your TFS credentials"))
