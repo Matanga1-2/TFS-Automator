@@ -44,7 +44,7 @@ def copy_task(tfs_instance, original_task_data, target_pbi_data):
                   str(target_pbi_data.id) +
                   " successfully")
         except requests.exceptions.HTTPError as error:
-            print("Oops.. there was an HTTP error: {0}".format(error))
+            print(f'Oops.. there was an HTTP error: {error}')
             return
 
 
@@ -75,7 +75,7 @@ def copy_pbi_to_cleanup(tfs_instance, user_credentials, title_type):
         new_pbi = tfs_instance.add_workitem(item_fields=cleanup_pbi["data"],
                                             parent_item_id=cleanup_pbi["parent_id"],
                                             workitem_type="PBI")
-        print("PBI " + str(new_pbi) + " was created successfully")
+        print(f'PBI {str(new_pbi)} was created successfully')
         new_pbi_data = tfs_instance.get_workitem(new_pbi)
     except requests.exceptions.HTTPError as error:
         print("Oops.. there was an HTTP error: {0}".format(error))
@@ -100,7 +100,7 @@ def copy_pbi_to_cleanup(tfs_instance, user_credentials, title_type):
         add_tasks_to_pbi(tfs_instance, user_credentials,
                          pbi_type="CleanupTasks", pbi_id=new_pbi)
     except requests.exceptions.HTTPError as error:
-        print("Oops.. there was an HTTP error: {0}".format(error))
+        print(f'Oops.. there was an HTTP error: {error}')
         return
 
 
@@ -129,10 +129,10 @@ def create_cleanup_pbi_to_feature(tfs_instance, user_credentials):
         new_pbi = tfs_instance.add_workitem(item_fields=cleanup_pbi["data"],
                                             parent_item_id=cleanup_pbi["parent_id"],
                                             workitem_type="PBI")
-        print("PBI " + str(new_pbi) + " was created successfully")
+        print(f'PBI {str(new_pbi)} was created successfully')
         new_pbi_data = tfs_instance.get_workitem(new_pbi)
     except requests.exceptions.HTTPError as error:
-        print("Oops.. there was an HTTP error: {0}".format(error))
+        print(f'Oops.. there was an HTTP error: {error}')
         return
 
     # Add the related relation
@@ -154,7 +154,7 @@ def create_cleanup_pbi_to_feature(tfs_instance, user_credentials):
         add_tasks_to_pbi(tfs_instance, user_credentials,
                          pbi_type="CleanupTasks", pbi_id=new_pbi)
     except requests.exceptions.HTTPError as error:
-        print("Oops.. there was an HTTP error: {0}".format(error))
+        print(f'Oops.. there was an HTTP error: {error}')
         return
 
 
@@ -173,9 +173,9 @@ def add_task_to_pbi(tfs_instance, task, pbi_data):
                                              pbi_data.id,
                                              workitem_type="Task")  # Add a new task
     except requests.exceptions.HTTPError as error:
-        print("Oops.. there was an HTTP error: {0}".format(error))
+        print(f'Oops.. there was an HTTP error: {error}')
         return
-    print("Task " + str(new_task) + " was added successfully")
+    print(f'Task {str(new_task)} was added successfully')
 
 
 def add_tasks_to_pbi(tfs_instance, user_credentials, pbi_id=None, pbi_type="regular"):
@@ -196,7 +196,7 @@ def add_tasks_to_pbi(tfs_instance, user_credentials, pbi_id=None, pbi_type="regu
     try:
         pbi_data = tfs_instance.get_workitem(pbi_id)
     except requests.exceptions.HTTPError as error:
-        print('An HTTP error: {0}'.format(error))
+        print(f'An HTTP error: {error}')
         return
     except:
         return
@@ -224,7 +224,7 @@ def clone_pbi_tasks(tfs_instance):
     try:
         source_pbi_data = tfs_instance.get_workitem(source_pbi_id)
     except requests.exceptions.HTTPError as error:
-        print('An HTTP error: {0}'.format(error))
+        print(f'An HTTP error: {error}')
         return
     except:
         return
@@ -284,7 +284,7 @@ def remove_pbi_with_tasks(tfs_instance, user_credentials):
     update_data = get_objects.get_removed_task_data(user_credentials)
     try:
         tfs_instance.update_workitem(pbi_id, update_data)
-        print('PBI {0} was removed successfully'.format(pbi_id))
+        print(f'PBI {pbi_id} was removed successfully')
     except requests.exceptions.HTTPError as error:
         print('An HTTP error: {0}'.format(error))
         return
@@ -308,7 +308,7 @@ def remove_task(tfs_instance, user_credentials, task_id):
         update_data = get_objects.get_removed_task_data(user_credentials, rel_count=1)
         try:
             tfs_instance.update_workitem(work_item_id=task_id, update_data=update_data)
-            print('Task {0} was removed successfully'.format(task_id))
+            print(f'Task {task_id} was removed successfully')
         except requests.exceptions.HTTPError as error:
             print('An HTTP error: {0}'.format(error))
             return
@@ -330,7 +330,7 @@ def remove_task_from_pbi(tfs_instance, user_credentials):
     try:
         remove_task(tfs_instance, user_credentials, task_id)
     except requests.exceptions.HTTPError as error:
-        print('An HTTP error: {0}'.format(error))
+        print(f'An HTTP error: {error}')
         return
     except:
         print('Oops.. Something went wrong. Please try again')

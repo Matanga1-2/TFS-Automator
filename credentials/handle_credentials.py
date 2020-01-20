@@ -19,14 +19,11 @@ class CredentialsError(Exception):
     """
 
 
-def get_credentials():
+def get_credentials_from_file():
     """
-    The function checks if credentials exists in the config file.
-    If not, it asks for the user to input his credentials.
-    :return: A 'credentials' dictionary
+    The function finds the credentials file in the system
+    :return: A credentials dictionary is exists
     """
-
-    # Check the connection credentials, if they do not exist get and save them
     credentials = {}
 
     if not path.isdir(CREDENTIALS_PATH['folder']):
@@ -40,15 +37,33 @@ def get_credentials():
                 credentials['password'] = credentials_input[1].rstrip()
                 credentials['uri'] = credentials_input[2].rstrip()
                 credentials['project'] = credentials_input[3].rstrip()
-                credentials['name'] = credentials_input[4].\
+                credentials['name'] = credentials_input[4]. \
                     rstrip().replace(r'\\', r'\'').replace(r"'", "")
+                return credentials
             except IndexError:
                 remove(CREDENTIALS_PATH['file'])
                 print("There was a problem reading your credentials. Please try again...")
                 raise CredentialsError
     else:
+        return None
+
+
+def get_credentials():
+    """
+    The function checks if credentials exists in the config file.
+    If not, it asks for the user to input his credentials.
+    :return: A 'credentials' dictionary
+    """
+
+    # Get for file
+    credentials = get_credentials_from_file()
+
+    # Add new credentials
+    if credentials is None:
         print("It looks like this is your first time...")
         credentials = add_new_credentials()
+
+    # Return the found credentials
     return credentials
 
 
@@ -58,7 +73,7 @@ def add_new_credentials():
     Once finished, it returns the new credentials.
     :return: credentials dictionary
     """
-    credentials = {}
+    credentials = ({})
 
     # Get new credentials
     credentials['userName'] = input("What is your TFS username (email)? ")
