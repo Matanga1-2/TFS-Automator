@@ -184,7 +184,11 @@ def __get_next_iteration(original_pbi_data):
     :param original_pbi_data: A TFS workitem object
     :return: A string of the next iteration path
     """
-    return original_pbi_data["System.IterationPath"]
+    original_iteration = original_pbi_data["System.IterationPath"]
+    original_iteration_split = original_iteration.split("\\")
+    if original_iteration_split[-1] == "Current":
+        original_iteration_split.pop()
+    return "\\".join(original_iteration_split)
 
 
 def __get_cleanup_title(tfs_instance, original_pbi_fields, parent_id, title_type):
@@ -200,7 +204,7 @@ def __get_cleanup_title(tfs_instance, original_pbi_fields, parent_id, title_type
         cleanup_pbi_title = original_pbi_fields["System.Title"] + " - Cleanup"
     elif title_type == "CreateCleanupFromFeature":
         if parent_id is not None:
-            feature_data = tfs_instance.connection.get_workitem(parent_id)
+            feature_data = tfs_instance.get_workitem(parent_id)
             cleanup_pbi_title = feature_data["System.Title"] + ": Cleanup"
         else:
             cleanup_pbi_title = original_pbi_fields["System.Title"] + " - Cleanup"
@@ -246,12 +250,12 @@ def get_cleanup_pbi(tfs_instance, original_pbi_id, title_type=None):
 
         # Static fields
         cleanup_pbi["data"]["System.State"] = "Approved"
-        cleanup_pbi["data"]["Microsoft.VSTS.Common.BusinessValue"] = "3001"
+        # not relevant anymore - cleanup_pbi["data"]["Microsoft.VSTS.Common.BusinessValue"] = "3001"
         cleanup_pbi["data"]["Microsoft.VSTS.Scheduling.Effort"] = "0"
         cleanup_pbi["data"]["System.Description"] = "Cleanup PBI for PBI " + \
                                                     str(original_pbi_id)
-        cleanup_pbi["data"]["NetBet.ProductPreparationState"] = "In Progress"
-        cleanup_pbi["data"]["NetBet.TechnicalPreparationState"] = "Not Required"
+        cleanup_pbi["data"]["NetBet.ProductPreparationState"] = "Not Required"
+        cleanup_pbi["data"]["NetBet.TechnicalPreparationState"] = "Not Started"
         cleanup_pbi["data"]["System.IterationPath"] = \
             __get_next_iteration(original_pbi_data)
 

@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoTestManager">
+    <enabled-run-configurations>
+      <run-configuration type="tests" name="Unittests for test_handle_credentials.TestCredentials" />
+    </enabled-run-configurations>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="7392129f-4a83-4b67-a8bd-54c8024681c0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/operations/get_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/operations/get_objects.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/operations/manageTasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/operations/manage_tasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/operations/manage_tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/operations/manage_tasks.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tfs_access.py" beforeDir="false" afterPath="$PROJECT_DIR$/tfs_access.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tfs_connect/tfs.py" beforeDir="false" afterPath="$PROJECT_DIR$/tfs_connect/tfs.py" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,6 +22,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="Python Unit Test" />
       </list>
     </option>
   </component>
@@ -48,24 +54,13 @@
     <property name="settings.editor.selected.configurable" value="preferences.externalTools" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\matang\PycharmProjects\tfs_tool\tests" />
+      <recent name="C:\Users\matang\PycharmProjects\TFS-Access" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\matang\PycharmProjects\TFS-Access\TFSConnect" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\matang\PycharmProjects\TFS-Access" />
-    </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager" selected="Python.tfs_tool">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
@@ -163,6 +158,20 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <method v="2" />
     </configuration>
+    <configuration name="Unittests for test_handle_credentials.TestCredentials" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="TFS-Access" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_handle_credentials.TestCredentials&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="tests" factoryName="Doctests">
       <module name="tfs_tool" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -199,13 +208,27 @@
       <item itemvalue="Python.tfs_tool" />
       <item itemvalue="Python.tkinter" />
       <item itemvalue="Python.ui" />
+      <item itemvalue="Python tests.Unittests for test_handle_credentials.TestCredentials" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.Unittests for test_handle_credentials.TestCredentials" />
         <item itemvalue="Python.ui" />
         <item itemvalue="Python.tkinter" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration>C:\Users\matang\AppData\Roaming\Subversion</configuration>
@@ -414,7 +437,28 @@
       <option name="project" value="LOCAL" />
       <updated>1579074603073</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="- Fixes using pylint">
+      <created>1579078983407</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1579078983407</updated>
+    </task>
+    <task id="LOCAL-00030" summary="- Fixes using Pylint&#10;- Added context manager to TFSAPI&#10;- Open files using &quot;with&quot;&#10;- General fixes">
+      <created>1579186053240</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1579186053240</updated>
+    </task>
+    <task id="LOCAL-00031" summary="- Fixes using Pylint&#10;- Added context manager to TFSAPI&#10;- Open files using &quot;with&quot;&#10;- General fixes">
+      <created>1579532439217</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1579532439217</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -468,96 +512,57 @@
     <MESSAGE value="- Minor changes" />
     <MESSAGE value="- Added function to remove a task&#10;- Added function to remove a PBI and its tasks" />
     <MESSAGE value="- Cleanup PBI is created for the same iteration" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Cleanup PBI is created for the same iteration" />
+    <MESSAGE value="- Fixes using pylint" />
+    <MESSAGE value="- Fixes using Pylint&#10;- Added context manager to TFSAPI&#10;- Open files using &quot;with&quot;&#10;- General fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Fixes using Pylint&#10;- Added context manager to TFSAPI&#10;- Open files using &quot;with&quot;&#10;- General fixes" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="728" y="351" width="463" height="342" key="#com.intellij.tools.ToolEditorDialog" timestamp="1579069813690">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="438" y="68" key="#xdebugger.evaluate" timestamp="1590474062181">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="728" y="351" width="463" height="342" key="#com.intellij.tools.ToolEditorDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1579069813690" />
-    <state x="740" y="262" key="FileChooserDialogImpl" timestamp="1579070028072">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="438" y="68" key="#xdebugger.evaluate/0.0.1366.728@0.0.1366.728" timestamp="1590474062181" />
+    <state width="1323" height="220" key="GridCell.Tab.0.bottom" timestamp="1590474708253">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="740" y="262" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1579070028072" />
-    <state width="1877" height="439" key="GridCell.Tab.0.bottom" timestamp="1579070609170">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1323" height="220" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1590474708253" />
+    <state width="1323" height="220" key="GridCell.Tab.0.center" timestamp="1590474708253">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1877" height="439" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1579070609170" />
-    <state width="1877" height="439" key="GridCell.Tab.0.center" timestamp="1579070609170">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1323" height="220" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1590474708253" />
+    <state width="1323" height="220" key="GridCell.Tab.0.left" timestamp="1590474708253">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1877" height="439" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1579070609170" />
-    <state width="1877" height="439" key="GridCell.Tab.0.left" timestamp="1579070609170">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1323" height="220" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1590474708253" />
+    <state width="1323" height="220" key="GridCell.Tab.0.right" timestamp="1590474708253">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1877" height="439" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1579070609170" />
-    <state width="1877" height="439" key="GridCell.Tab.0.right" timestamp="1579070609170">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1323" height="220" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1590474708253" />
+    <state width="1323" height="220" key="GridCell.Tab.1.bottom" timestamp="1590474664475">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1877" height="439" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1579070609170" />
-    <state x="706" y="157" key="SettingsEditor" timestamp="1579070535631">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1323" height="220" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1590474664475" />
+    <state width="1323" height="220" key="GridCell.Tab.1.center" timestamp="1590474664475">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="706" y="157" key="SettingsEditor/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1579070535631" />
+    <state width="1323" height="220" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1590474664475" />
+    <state width="1323" height="220" key="GridCell.Tab.1.left" timestamp="1590474664475">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="220" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1590474664475" />
+    <state width="1323" height="220" key="GridCell.Tab.1.right" timestamp="1590474664475">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="220" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1590474664475" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/operations/get_objects.py</url>
-          <line>241</line>
-          <option name="timeStamp" value="8" />
+          <line>230</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-  </component>
-  <component name="debuggerHistoryManager">
-    <expressions id="evaluateExpression">
-      <expression>
-        <expression-string>cleanup_pbi_title</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>action[&quot;function&quot;]</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>buttons_list[-1]</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>conn.getresponse(buffering=True)</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>len(relations)</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>update_data</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>pbi_data.data.get('relations')</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>len(pbi_data.data.get('relations'))</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>pbi_data.get('relations')</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-    </expressions>
   </component>
 </project>

@@ -16,14 +16,17 @@ class TFSConnection:
         self.username = credentials['userName']
         self.password = credentials['password']
         self.project = credentials['project']
-        self.connection = None
+        self.connection = self.connect_to_tfs()
 
+    """
     def __enter__(self):
         self.connection = self.connect_to_tfs()
         return self.connection
 
     def __exit__(self, exception_type, exception_value, traceback):
         self.connection = None
+
+    """
 
     def add_workitem(self, item_fields, parent_item_id=None, workitem_type="Task"):
         """

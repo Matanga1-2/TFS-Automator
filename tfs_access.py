@@ -127,8 +127,8 @@ def main():
         selected_operation_id = get_operation(operations)
         watch_dog.refresh()
 
-        with tfs.TFSConnection(user_credentials) as con:
-            activate_operation(selected_operation_id, con, user_credentials)
+        tfs_instance = tfs.TFSConnection(user_credentials)
+        activate_operation(selected_operation_id, tfs_instance, user_credentials)
 
         # check if need to continue
         if continue_program():
